@@ -1,0 +1,1782 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>ماشین حساب مدیریت ریسک ترید</title>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+/* برای فونت ساحل، بهتر است از یک CDN معتبر فارسی یا هاست کردن فونت استفاده کنید.
+   مثال (ممکن است نیاز به تغییر URL داشته باشد): */
+@import url('https://cdn.jsdelivr.net/gh/rastikerdar/sahel-font@v3.4.0/dist/font-face.css');
+
+:root {
+    font-size: 21px;
+    /* Light Mode Colors - More Vibrant & Fresh */
+    --bg-color: linear-gradient(135deg, #e0f2f7, #c9e6f9); /* Sky Blue to Light Blue Gradient */
+    --text-color: #334e68; /* Deep Blue Text */
+    --card-bg: #ffffff; /* Pure White Card */
+    --input-bg: #fdfdfd; /* Off-white for inputs */
+    --label-color: #4a6c8e; /* Muted Blue Label */
+    --table-header: linear-gradient(135deg, #4dc0e0, #67d7f5); /* Bright Teal Header */
+    --table-bg: #f0faff; /* Very Light Blue for Table Rows */
+    --hover-bg: #dbeeff; /* Soft Light Blue Hover */
+    --result-bg: #e6f7ff; /* Slightly Deeper Light Blue for Result */
+    --result-text: #2a588a; /* Darker Blue for Result Text */
+    --button-long-bg: linear-gradient(135deg, #1a7345, #22995e); /* Deeper, more sophisticated green */
+    --button-long-hover: linear-gradient(135deg, #22995e, #1a7345);
+    --button-short-bg: linear-gradient(135deg, #8a3f4e, #a85a6b); /* Deeper, more sophisticated red */
+    --button-short-hover: linear-gradient(135deg, #a85a6b, #8a3f4e);
+    --history-bg: #f8fcff; /* Consistent Light Background */
+    --history-border: #aeddf9;
+    --clear-button-bg: #e05e5e; /* Matching Red for Clear */
+    --clear-button-hover: #c44e4e;
+    --delete-btn-color: #e05e5e; /* Matching Delete Button */
+    --toggle-button-bg: linear-gradient(135deg, #8e44ad, #9b59b6); /* Plum & Lavender Toggle */
+    --toggle-button-hover: linear-gradient(135deg, #9b59b6, #8e44ad);
+    /* Dropdown specific colors */
+    --dropdown-bg: #ffffff;
+    --dropdown-hover-bg: #f0faff;
+    --dropdown-text-color: #334e68;
+    --wallet-address-bg: #e0f2f7; /* Light background for wallet addresses */
+    --wallet-address-border: #aeddf9; /* Border for wallet addresses */
+    --copy-icon-color: #4a6c8e; /* Color for copy icon */
+}
+
+body.dark {
+    /* Dark Mode Colors - Deeper & Richer */
+    --bg-color: linear-gradient(135deg, #182e4e, #0e1b2f); /* Deep Night Blue Gradient */
+    --text-color: #e3f2fd; /* Soft Off-White Text */
+    --card-bg: #223a5e; /* Darker Card Background */
+    --input-bg: #2d4670; /* Darker Input Fields */
+    --label-color: #a9c6e3; /* Lighter Blue Label */
+    --table-header: linear-gradient(135deg, #4a80b0, #3a6b9a); /* Muted Deep Blue Header */
+    --table-bg: #3c5a8a; /* Darker Table Rows */
+    --hover-bg: #4f73aa; /* More Distinct Hover */
+    --result-bg: #3d5a8c; /* Darker Result Box */
+    --result-text: #c8e8ff; /* Lighter Blue Result Text */
+    --button-long-bg: linear-gradient(135deg, #1a7345, #22995e); /* Deeper, more sophisticated green */
+    --button-long-hover: linear-gradient(135deg, #22995e, #1a7345);
+    --button-short-bg: linear-gradient(135deg, #8a3f4e, #a85a6b); /* Deeper, more sophisticated red */
+    --button-short-hover: linear-gradient(135deg, #a85a6b, #8a3f4e);
+    --history-bg: #223a5e; /* Same as Card Background */
+    --history-border: #4A7BA8; /* Consistent with Table Header */
+    --clear-button-bg: #a84f5f; /* Darker Sophisticated Red */
+    --clear-button-hover: #914251;
+    --delete-btn-color: #ff99a0; /* Lighter Red for Dark Mode Delete */
+    --toggle-button-bg: linear-gradient(135deg, #6c7e90, #8d9eb5); /* Softer Gray Toggle */
+    --toggle-button-hover: linear-gradient(135deg, #8d9eb5, #6c7e90);
+    /* Dropdown specific colors for dark mode */
+    --dropdown-bg: #2c476b;
+    --dropdown-hover-bg: #3a5c8a;
+    --dropdown-text-color: #e3f2fd;
+    --wallet-address-bg: #3c5a8a; /* Darker background for wallet addresses */
+    --wallet-address-border: #4f73aa; /* Darker border for wallet addresses */
+    --copy-icon-color: #c8e8ff; /* Lighter color for copy icon */
+}
+
+body {
+    font-family: 'Sahel', 'Poppins', sans-serif;
+    background: var(--bg-color);
+    padding: 30px;
+    color: var(--text-color);
+    text-align: center;
+    transition: background 0.4s, color 0.4s;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    direction: rtl;
+    font-size: 20px;
+}
+
+h2 {
+    font-weight: 700;
+    color: var(--label-color);
+    margin-bottom: 30px;
+    font-size: 1.8rem;
+}
+
+.container {
+    background: var(--card-bg);
+    max-width: 620px;
+    margin: auto;
+    padding: 35px 40px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    transition: background 0.4s, color 0.4s, box-shadow 0.4s;
+    flex-grow: 1;
+}
+
+label {
+    display: block;
+    text-align: right;
+    margin: 22px 0 8px;
+    font-weight: 600;
+    font-size: 24px;
+    color: var(--label-color);
+    text-transform: uppercase;
+}
+
+input[type="number"] {
+    -moz-appearance: textfield;
+    appearance: none;
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type="number"],
+input[type="text"],
+select {
+    width: 100%;
+    padding: 14px 18px;
+    font-size: 18.5px;
+    border-radius: 12px;
+    border: 1.5px solid #dcdcdc;
+    background: var(--input-bg);
+    color: var(--text-color);
+    font-weight: 500;
+    transition: background 0.4s, color 0.4s, border-color 0.4s, box-shadow 0.4s;
+    box-sizing: border-box;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="%234A6FA5" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>');
+    background-repeat: no-repeat;
+    background-position: left 15px center;
+    padding-left: 40px;
+    text-align: right;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.06);
+}
+
+body.dark input[type="number"],
+body.dark input[type="text"],
+body.dark select {
+    border-color: #4a618f;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.15);
+}
+
+input[type="number"]::placeholder,
+input[type="text"]::placeholder {
+    color: #95a5a6;
+    font-style: italic;
+    text-align: right;
+}
+
+body.dark input[type="number"]::placeholder,
+body.dark input[type="text"]::placeholder {
+    color: #80809b;
+}
+
+input[type="number"]:focus,
+input[type="text"]:focus,
+select:focus {
+    border-color: #5cb8e0;
+    outline: none;
+    box-shadow: 0 0 12px rgba(92, 184, 224, 0.6);
+}
+
+body.dark input[type="number"]:focus,
+body.dark input[type="text"]:focus,
+body.dark select:focus {
+    border-color: #7ab3e0;
+    box-shadow: 0 0 12px rgba(122
+
+, 179, 224, 0.5);
+}
+
+.button-group {
+    display: flex;
+    gap: 15px;
+    margin-top: 25px;
+}
+
+button {
+    flex: 1;
+    border: none;
+    color: white;
+    padding: 14px 28px;
+    font-size: 20px;
+    font-weight: 600;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.12);
+    font-family: 'Sahel', sans-serif;
+}
+
+body:not(.dark) button {
+    color: white;
+}
+
+button.default {
+    background: linear-gradient(135deg, #2980b9, #6dd5fa);
+}
+
+button.default:hover {
+    background: linear-gradient(135deg, #3498db, #57c1eb);
+    transform: translateY(-3px);
+    box-shadow: 0 9px 20px rgba(0,0,0,0.2);
+}
+
+button.long {
+    background: var(--button-long-bg);
+}
+
+button.long:hover {
+    background: var(--button-long-hover);
+    transform: translateY(-3px);
+    box-shadow: 0 9px 20px rgba(0,0,0,0.2);
+}
+
+button.short {
+    background: var(--button-short-bg);
+}
+
+button.short:hover {
+    background: var(--button-short-hover);
+    transform: translateY(-3px);
+    box-shadow: 0 9px 20px rgba(0,0,0,0.2);
+}
+
+.result {
+    margin-top: 40px;
+    background: var(--result-bg);
+    padding: 28px 35px;
+    border-radius: 18px;
+    font-size: 25px;
+    color: var(--result-text);
+    font-weight: 600;
+    display: none;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    transition: background 0.4s, color 0.4s, box-shadow 0.4s;
+    text-align: right;
+}
+
+.result span {
+    font-family: 'Poppins', 'Sahel', sans-serif;
+}
+
+table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 10px;
+    margin-top: 18px;
+    font-weight: 600;
+    font-size: 20px;
+    text-align: right;
+    transition: background 0.4s, color 0.4s;
+}
+
+th, td {
+    padding: 14px 20px;
+    border-radius: 14px;
+    background: var(--table-bg);
+    color: var(--text-color);
+    transition: background 0.4s, color 0.4s, background-color 0.3s;
+    text-align: right;
+    font-family: 'Poppins', 'Sahel', sans-serif;
+}
+
+th {
+    background-color: var(--table-header);
+    color: black;
+    text-align: right;
+    border-top-right-radius: 14px;
+    border-top-left-radius: 14px;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+table tr:last-child td:first-child {
+    border-bottom-right-radius: 14px;
+    border-bottom-left-radius: 0;
+}
+
+table tr:last-child td:last-child {
+    border-bottom-left-radius: 14px;
+    border-bottom-right-radius: 0;
+}
+
+tr:hover td {
+    background-color: var(--hover-bg);
+}
+
+.fixed-settings-buttons {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    z-index: 1000;
+    transition: background 0.4s, box-shadow 0.4s;
+}
+
+.fixed-settings-buttons button {
+    width: 260px;
+    padding: 12px 18px;
+    font-size: 22px;
+    font-weight: 500;
+    border-radius: 16px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    background: var(--toggle-button-bg);
+    color: black;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    position: relative;
+}
+
+.fixed-settings-buttons button:hover {
+    background: var(--toggle-button-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+}
+
+.fixed-settings-buttons button svg {
+    width: 18px;
+    height: 18px;
+    fill: white;
+}
+
+.language-dropdown,
+.donate-dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.language-dropdown-content,
+.donate-dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: var(--dropdown-bg);
+    min-width: 260px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1001;
+    border-radius: 10px;
+    top: 100%;
+    right: 0;
+    margin-top: 8px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    transform-origin: top;
+    transform: translateY(10px) scaleY(0.9);
+    opacity: 0;
+}
+
+.language-dropdown-content.show,
+.donate-dropdown-content.show {
+    display: block;
+    transform: translateY(0) scaleY(1);
+    opacity: 1;
+}
+
+.language-dropdown-content a {
+    color: var(--dropdown-text-color);
+    padding: 10px 18px;
+    text-decoration: none;
+    display: block;
+    text-align: right;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: background-color 0.2s, color 0.2s;
+    cursor: pointer;
+}
+
+.language-dropdown-content a:hover {
+    background-color: var(--dropdown-hover-bg);
+    color: var(--text-color);
+}
+
+.donate-dropdown-content .wallet-item {
+    padding: 10px 18px;
+    border-bottom: 1px solid var(--dropdown-hover-bg);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: right;
+    font-size: 0.85rem;
+    color: var(--dropdown-text-color);
+}
+
+.donate-dropdown-content .wallet-item:last-child {
+    border-bottom: none;
+}
+
+.donate-dropdown-content .wallet-item span {
+    font-weight: 600;
+    margin-bottom: 5px;
+    display: block;
+    width: 100%;
+}
+
+.donate-dropdown-content .wallet-address {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    background-color: var(--wallet-address-bg);
+    border: 1px solid var(--wallet-address-border);
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.8rem;
+    word-break: break-all;
+    cursor: pointer;
+    transition: background-color 0.2s, border-color 0.2s;
+}
+
+.donate-dropdown-content .wallet-address:hover {
+    background-color: var(--hover-bg);
+    border-color: var(--table-header);
+}
+
+.donate-dropdown-content .copy-icon {
+    margin-right: 8px;
+    cursor: pointer;
+    width: 16px;
+    height: 16px;
+    fill: var(--copy-icon-color);
+    flex-shrink: 0;
+    transition: fill 0.2s;
+}
+
+.donate-dropdown-content .copy-icon:hover {
+    fill: #007bff;
+}
+
+.history-section {
+    margin-top: 40px;
+    text-align: right;
+    background: var(--history-bg);
+    padding: 28px 35px;
+    border-radius: 18px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    border: 1px solid var(--history-border);
+    transition: background 0.4s, border-color 0.4s, box-shadow 0.4s;
+}
+
+.history-section h3 {
+    color: var(--label-color);
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+    text-align: center;
+}
+
+#historyList {
+    list-style: none;
+    padding: 0;
+    max-height: 400px;
+    overflow-y: auto;
+    border: 1px solid var(--table-bg);
+    border-radius: 10px;
+}
+
+#historyList::-webkit-scrollbar {
+    width: 8px;
+}
+
+#historyList::-webkit-scrollbar-track {
+    background: var(--input-bg);
+    border-radius: 10px;
+}
+
+#historyList::-webkit-scrollbar-thumb {
+    background: var(--table-header);
+    border-radius: 10px;
+}
+
+#historyList::-webkit-scrollbar-thumb:hover {
+    background: var(--hover-bg);
+}
+
+#historyList li {
+    background: var(--table-bg);
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    border: 1px solid var(--hover-bg);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    transition: background 0.3s, border-color 0.3s;
+    font-family: 'Poppins', 'Sahel', sans-serif;
+}
+
+#historyList li:hover {
+    background-color: var(--hover-bg);
+    border-color: var(--table-header);
+}
+
+#historyList li > div {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    font-size: 0.9em;
+    flex-grow: 1;
+    text-align: right;
+}
+
+#historyList li span {
+    display: block;
+    margin-bottom: 0;
+    word-break: break-word;
+}
+
+.clear-history-button {
+    background-color: var(--clear-button-bg);
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 1rem;
+    margin-top: 25px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    font-weight: 600;
+}
+
+.clear-history-button:hover {
+    background-color: var(--clear-button-hover);
+    transform: scale(1.02);
+}
+
+.delete-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2em;
+    color: var(--delete-btn-color);
+    padding: 0;
+    margin: 0 5px;
+    line-height: 1;
+    align-self: center;
+    flex-shrink: 0;
+    transition: color 0.3s, transform 0.2s;
+}
+
+.delete-btn:hover {
+    opacity: 0.8;
+    color: #ff3333;
+}
+
+body.dark .delete-btn:hover {
+    color: #ffaaaa;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    :root {
+        font-size: 18px; /* Slightly reduce base font size */
+    }
+
+    body {
+        padding: 20px;
+    }
+
+    .fixed-settings-buttons {
+        top: 15px;
+        right: 15px;
+        gap: 10px;
+    }
+
+    .fixed-settings-buttons button {
+        width: 220px;
+        padding: 10px 16px;
+        font-size: 20px;
+        border-radius: 14px;
+    }
+
+    .fixed-settings-buttons button svg {
+        width: 16px;
+        height: 16px;
+    }
+
+    .language-dropdown-content,
+    .donate-dropdown-content {
+        min-width: 220px;
+        font-size: 0.85rem;
+    }
+
+    .donate-dropdown-content .wallet-address {
+        font-size: 0.75rem;
+        padding: 6px 10px;
+    }
+
+    .donate-dropdown-content .copy-icon {
+        width: 14px;
+        height: 14px;
+    }
+
+    .container {
+        max-width: 100%;
+        padding: 25px 20px;
+        border-radius: 16px;
+    }
+
+    h2 {
+        font-size: 1.6rem;
+        margin-bottom: 20px;
+    }
+
+    label {
+        font-size: 20px;
+        margin: 18px 0 6px;
+    }
+
+    input[type="number"],
+    input[type="text"],
+    select {
+        padding: 12px 16px;
+        font-size: 16px;
+        border-radius: 10px;
+        background-position: left 12px center;
+        padding-left: 35px;
+    }
+
+    .button-group {
+        flex-direction: column;
+        gap: 12px;
+        margin-top: 20px;
+    }
+
+    button {
+        padding: 12px 20px;
+        font-size: 18px;
+        border-radius: 10px;
+    }
+
+    .result {
+        padding: 20px 25px;
+        font-size: 20px;
+        border-radius: 14px;
+        margin-top: 30px;
+    }
+
+    table {
+        font-size: 18px;
+        border-spacing: 0 8px;
+    }
+
+    th, td {
+        padding: 12px 16px;
+        border-radius: 12px;
+    }
+
+    .history-section {
+        padding: 20px 25px;
+        border-radius: 14px;
+        margin-top: 30px;
+    }
+
+    .history-section h3 {
+        font-size: 1.3rem;
+    }
+
+    #historyList {
+        max-height: 300px;
+    }
+
+    #historyList li {
+        padding: 12px;
+        margin-bottom: 8px;
+        font-size: 0.85em;
+    }
+
+    .clear-history-button {
+        padding: 10px 20px;
+        font-size: 0.9rem;
+        border-radius: 10px;
+    }
+
+    .delete-btn {
+        font-size: 1.1em;
+    }
+}
+
+@media (max-width: 480px) {
+    :root {
+        font-size: 16px; /* Further reduce base font size */
+    }
+
+    body {
+        padding: 15px;
+    }
+
+    .fixed-settings-buttons {
+        position: static;
+        position: static;
+        margin: 0 auto 15px;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 8px;
+        width: 100%;
+        padding: 0;
+        box-shadow: none;
+        background: none;
+    }
+
+    .fixed-settings-buttons button {
+        width: auto;
+        flex: 1;
+        min-width: 140px;
+        padding: 8px 12px;
+        font-size: 16px;
+        border-radius: 12px;
+    }
+
+    .fixed-settings-buttons button svg {
+        display: none;
+    }
+
+    .language-dropdown-content,
+    .donate-dropdown-content {
+        min-width: 100%;
+        right: 0;
+        left: 0;
+        font-size: 0.8rem;
+        margin-top: 6px;
+    }
+
+    .donate-dropdown-content .wallet-item {
+        padding: 8px 12px;
+    }
+
+    .donate-dropdown-content .wallet-address {
+        font-size: 0.7rem;
+        padding: 5px 8px;
+    }
+
+    .donate-dropdown-content .copy-icon {
+        width: 12px;
+        height: 12px;
+        margin-right: 6px;
+    }
+
+    .container {
+        padding: 15px 12px;
+        border-radius: 12px;
+    }
+
+    h2 {
+        font-size: 1.4rem;
+        margin-bottom: 15px;
+    }
+
+    label {
+        font-size: 16px;
+        margin: 15px 0 5px;
+    }
+
+    input[type="number"],
+    input[type="text"],
+    select {
+        padding: 10px 12px;
+        font-size: 14px;
+        border-radius: 8px;
+        background-position: left 10px center;
+        padding-left: 30px;
+    }
+
+    .button-group {
+        gap: 10px;
+    }
+
+    button {
+        padding: 10px 15px;
+        font-size: 16px;
+        border-radius: 8px;
+    }
+
+    .result {
+        padding: 15px 20px;
+        font-size: 16px;
+        border-radius: 10px;
+        margin-top: 20px;
+    }
+
+    table {
+        font-size: 14px;
+        border-spacing: 0 6px;
+    }
+
+    th, td {
+        padding: 10px 12px;
+        border-radius: 10px;
+    }
+
+    .history-section {
+        padding: 15px 20px;
+        border-radius: 10px;
+        margin-top: 20px;
+    }
+
+    .history-section h3 {
+        font-size: 1.2rem;
+        margin-bottom: 15px;
+    }
+
+    #historyList {
+        max-height: 250px;
+    }
+
+    #historyList li {
+        padding: 10px;
+        margin-bottom: 6px;
+        flex-direction: column;
+        align-items: flex-end;
+        font-size: 0.8em;
+    }
+
+    #historyList li > div {
+        gap: 3px;
+        width: 100%;
+    }
+
+    .delete-btn {
+        align-self: flex-start;
+        margin-top: 5px;
+        font-size: 1em;
+    }
+
+    .clear-history-button {
+        padding: 8px 15px;
+        font-size: 0.85rem;
+        border-radius: 8px;
+    }
+}
+</style>
+</head>
+<body>
+
+    <div class="fixed-settings-buttons">
+        <button class="dark-toggle" onclick="toggleDarkMode()">
+            <span>🌙 حالت تاریک</span>
+        </button>
+        <button class="calculator-toggle" onclick="toggleCalculator()">
+            <span>📈 برو به فارکس</span>
+        </button>
+        <div class="language-dropdown">
+            <button class="language-toggle">
+                <span> language</span>
+            </button>
+            <div class="language-dropdown-content" id="languageDropdownContent">
+                <a href="#" data-lang="fa"> فارسی</a>
+                <a href="#" data-lang="en"> English</a>
+            </div>
+        </div>
+        <div class="donate-dropdown">
+            <button class="donate-toggle">
+                <span>❤️ حمایت مالی</span>
+            </button>
+            <div class="donate-dropdown-content" id="donateDropdownContent">
+                <div class="wallet-item">
+                    <span>USDT (TRC20):</span>
+                    <div class="wallet-address" data-address="TZDEcYg4QDEaaDNnEXAc3gBzE8HKmdtvnt">
+                        <span>TZDEcYg4QDEaaDNnEXAc3gBzE8HKmdtvnt</span>
+                        <svg class="copy-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M16 1H4C2.895 1 2 1.895 2 3v14h2V3h12V1zm3 4H8c-1.105 0-2 .895-2 2v14c0 1.105.895 2 2 2h11c1.105 0 2-.895 2-2V7c0-1.105-.895-2-2-2zm0 16H8V7h11v14z"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="wallet-item">
+                    <span>TON (Mainnet):</span>
+                    <div class="wallet-address" data-address="UQDobd37J7FwRpAJ8xkNgX1qV_PwWHSwtX4a-f-ZbrcjzxD7">
+                        <span>UQDobd37J7FwRpAJ8xkNgX1qV_PwWHSwtX4a-f-ZbrcjzxD7</span>
+                        <svg class="copy-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M16 1H4C2.895 1 2 1.895 2 3v14h2V3h12V1zm3 4H8c-1.105 0-2 .895-2 2v14c0 1.105.895 2 2 2h11c1.105 0 2-.895 2-2V7c0-1.105-.895-2-2-2zm0 16H8V7h11v14z"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="wallet-item">
+                    <span>BTC (Bitcoin):</span>
+                    <div class="wallet-address" data-address="bc1q2awnjw4a4he9x36q5fhkyx0ahzyfml7h7vay7r">
+                        <span>bc1q2awnjw4a4he9x36q5fhkyx0ahzyfml7h7vay7r</span>
+                        <svg class="copy-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M16 1H4C2.895 1 2 1.895 2 3v14h2V3h12V1zm3 4H8c-1.105 0-2 .895-2 2v14c0 1.105.895 2 2 2h11c1.105 0 2-.895 2-2V7c0-1.105-.895-2-2-2zm0 16H8V7h11v14z"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container" id="mainCalculatorContainer">
+        <section id="futuresCalculator" style="display: none;">
+            <h2>ماشین حساب مدیریت ریسک فیوچرز</h2>
+            <div class="input-group">
+                <label for="futuresAccountSize">سایز اکانت (USD):</label>
+                <input type="number" id="futuresAccountSize" placeholder="مثال: 1000" min="0.01" step="0.01">
+            </div>
+            <div class="input-group">
+                <label for="futuresRiskPercent">درصد ریسک (%):</label>
+                <input type="number" id="futuresRiskPercent" placeholder="مثال: 1 (1%)" min="0.01" step="0.01">
+            </div>
+             <div class="input-group">
+                <label for="currencyPair2"> ارز:</label>
+                <select id="currencyPair2">
+                    <option value="BTC">BTC</option>
+                    <option value="ETH">ETH</option>
+                    <option value="XRP">XRP</option>
+                    <option value="BNB">BNB</option>
+                    <option value="ADA">ADA</option>
+                    <option value="SOL">SOL</option>
+                    <option value="LTC ">LTC </option>
+                    <option value="DOT ">DOT </option>
+                    <option value="SHIB ">SHIB </option>
+                    <option value="UNI ">UNI </option>
+                    <option value="LINK ">LINK </option>
+
+                </select>
+            </div>
+            <div class="input-group">
+                <label for="futuresEntryPrice">قیمت ورود:</label>
+                <input type="number" id="futuresEntryPrice" placeholder="مثال: 30000" min="0.00000001" step="0.00000001">
+            </div>
+            <div class="input-group">
+                <label for="futuresStopValue">قیمت یا درصد حد ضرر (SL):</label>
+                <input type="number" id="futuresStopValue" placeholder="قیمت (مثال: 29500) یا درصد (مثال: 1.5)" min="0.00000001" step="0.00000001">
+            </div>
+            <div class="input-group">
+                <label for="futuresTpValue">قیمت یا درصد حد سود (TP):</label>
+                <input type="number" id="futuresTpValue" placeholder="قیمت (مثال: 31000) یا درصد (مثال: 3)" min="0.00000001" step="0.00000001">
+            </div>
+            <div class="input-group">
+                <label for="futuresLeverage">اهرم (X):</label>
+                <select id="futuresLeverage">
+                    <option value="1">1x</option>
+                    <option value="3">3x</option>
+                    <option value="5">5x</option>
+                    <option value="10">10x</option>
+                    <option value="15">15x</option>
+                    <option value="20">20x</option>
+                    <option value="50">50x</option>
+                    <option value="100">100x</option>
+                </select>
+            </div>
+            <div class="button-group">
+                <button class="long" onclick="calculateFutures('long')">محاسبه لانگ</button>
+                <button class="short" onclick="calculateFutures('short')">محاسبه شورت</button>
+            </div>
+        </section>
+
+        <section id="forexCalculator">
+            <h2>ماشین حساب مدیریت ریسک فارکس</h2>
+            <div class="input-group">
+                <label for="forexAccountSize">سایز اکانت (USD):</label>
+                <input type="number" id="forexAccountSize" placeholder="مثال: 5000" min="0.01" step="0.01">
+            </div>
+            <div class="input-group">
+                <label for="forexRiskPercent">درصد ریسک (%):</label>
+                <input type="number" id="forexRiskPercent" placeholder="مثال: 0.5 (0.5%)" min="0.01" step="0.01">
+            </div>
+            <div class="input-group">
+                <label for="currencyPair">جفت ارز:</label>
+                <select id="currencyPair">
+                    <option value="EURUSD">EURUSD</option>
+                    <option value="GBPUSD">GBPUSD</option>
+                    <option value="AUDUSD">AUDUSD</option>
+                    <option value="NZDUSD">NZDUSD</option>
+                    <option value="USDCAD">USDCAD</option>
+                    <option value="USDJPY">USDJPY</option>
+                    <option value="USDCHF">USDCHF</option>
+                    <option value="XAUUSD">XAUUSD </option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label for="forexEntryPrice">قیمت ورود:</label>
+                <input type="number" id="forexEntryPrice" placeholder="مثال: 1.08500" min="0.00000001" step="0.00000001">
+            </div>
+            <div class="input-group">
+                <label for="forexStopPips">حد ضرر (Pips):</label>
+                <input type="number" id="forexStopPips" placeholder="مثال: 20" min="0.1" step="0.1">
+            </div>
+            <div class="input-group">
+                <label for="forexTpPips">حد سود (Pips):</label>
+                <input type="number" id="forexTpPips" placeholder="مثال: 60" min="0.1" step="0.1">
+            </div>
+            <div class="input-group">
+                <label for="forexLeverage">اهرم (X):</label>
+                <select id="forexLeverage">
+                    <option value="10">10x</option>
+                    <option value="30">30x</option>
+                    <option value="50">50x</option>
+                    <option value="100" selected>100x</option> <option value="200">200x</option>
+                    <option value="400">400x</option>
+                    <option value="500">500x</option>
+                </select>
+            </div>
+            <div class="button-group">
+                <button class="long" onclick="calculateForex('long')">محاسبه لانگ</button>
+                <button class="short" onclick="calculateForex('short')">محاسبه شورت</button>
+            </div>
+        </section>
+
+        <div id="output" class="result">
+            </div>
+    </div>
+
+    <div class="container history-section">
+        <h3>تاریخچه محاسبات</h3>
+        <ul id="historyList">
+            </ul>
+        <button class="clear-history-button" onclick="clearHistory()">پاک کردن تاریخچه</button>
+    </div>
+
+    <script>
+        // --- Global State ---
+        let currentCalculator = 'forex'; // Default to forex
+        let currentLanguage = 'fa'; // Default language
+
+        // --- Utility Functions ---
+        function getRandomInRange(min, max, decimals = 2) {
+            const factor = Math.pow(10, decimals);
+            return Math.round((Math.random() * (max - min) + min) * factor) / factor;
+        }
+
+        // --- Dark Mode Toggle ---
+        function toggleDarkMode() {
+            document.body.classList.toggle("dark");
+            updateTextContent(); // Update button text based on new mode and current language
+        }
+
+        // --- Calculator Toggle ---
+        function toggleCalculator() {
+            const futuresDiv = document.getElementById('futuresCalculator');
+            const forexDiv = document.getElementById('forexCalculator');
+            const output = document.getElementById("output");
+            output.style.display = "none"; // Hide results when switching
+
+            if (currentCalculator === 'futures') {
+                futuresDiv.style.display = 'none';
+                forexDiv.style.display = 'block';
+                currentCalculator = 'forex';
+            } else { // currentCalculator === 'forex'
+                futuresDiv.style.display = 'block';
+                forexDiv.style.display = 'none';
+                currentCalculator = 'futures';
+            }
+            updateTextContent(); // Update button text based on new calculator and current language
+            displayHistory(); // Refresh history when switching calculators
+        }
+
+        // --- Language Toggle ---
+        const translations = {
+            'fa': {
+                'darkMode': '🌙 حالت تاریک',
+                'lightMode': '☀️ حالت روشن',
+                'goToForex': '📊  برو به فیوچرز',
+                'goToFutures': '📈 برو به  فارکس',
+                'language': '🌐 زبان', // Changed to "زبان" for Farsi
+                'donate': '❤️ حمایت مالی', // Added translation for donate button
+                'usdtTron': 'USDT (ترون):',
+                'tonMainnet': 'TON (شبکه اصلی):',
+                'btcBitcoin': 'BTC (بیت کوین):',
+                'copied': 'کپی شد!',
+                'futuresTitle': 'ماشین حساب مدیریت ریسک فیوچرز',
+                'accountSize': 'سایز اکانت (USD):',
+                'riskPercent': 'درصد ریسک (%):',
+                'currency': 'ارز:',
+                'entryPrice': 'قیمت ورود:',
+                'stopLossValue': 'قیمت یا درصد حد ضرر (SL):',
+                'takeProfitValue': 'قیمت یا درصد حد سود (TP):',
+                'leverage': 'اهرم (X):',
+                'calculateLong': 'محاسبه لانگ',
+                'calculateShort': 'محاسبه شورت',
+                'forexTitle': 'ماشین حساب مدیریت ریسک فارکس',
+                'currencyPair': 'جفت ارز:',
+                'stopLossPips': 'حد ضرر (Pips):',
+                'takeProfitPips': 'حد سود (Pips):',
+                'historyTitle': 'تاریخچه محاسبات',
+                'clearHistory': 'پاک کردن تاریخچه',
+                'confirmClearHistory': 'آیا از پاک کردن کل تاریخچه محاسبات مطمئن هستید؟',
+                'noHistory': '<li>   </li>',
+                'longPositionSLWarning': 'برای پوزیشن **لانگ**، قیمت حد ضرر باید **پایین‌تر** از قیمت ورود باشد.',
+                'longPositionTPWarning': 'برای پوزیشن **لانگ**، قیمت حد سود باید **بالاتر** از قیمت ورود باشد.',
+                'shortPositionSLWarning': 'برای پوزیشن **شورت**، قیمت حد ضرر باید **بالاتر** از قیمت ورود باشد.',
+                'shortPositionTPWarning': 'برای پوزیشن **شورت**، قیمت حد سود باید **پایین‌تر** از قیمت ورود باشد.',
+                'stopLossZeroWarning': 'مقدار حد ضرر منجر به صفر یا ضرر منفی می‌شود. لطفاً حد ضرر خود را تنظیم کنید.',
+                'pipStopLossPositiveWarning': 'پیپ حد ضرر باید عددی مثبت باشد.',
+                'forexPairError': (pair) => `خطا: جفت ارز ${pair} به درستی قابل محاسبه نیست.`,
+                'longPositionSLWarningForex': 'برای پوزیشن **لانگ**، پیپ حد ضرر باید قیمت را **پایین‌تر** از قیمت ورود ببرد.',
+                'longPositionTPWarningForex': 'برای پوزیشن **لانگ**، پیپ حد سود باید قیمت را **بالاتر** از قیمت ورود ببرد.',
+                'shortPositionSLWarningForex': 'برای پوزیشن **شورت**، پیپ حد ضرر باید قیمت را **بالاتر** از قیمت ورود ببرد.',
+                'shortPositionTPWarningForex': 'برای پوزیشن **شورت**، پیپ حد سود باید قیمت را **پایین‌تر** از قیمت ورود ببرد.',
+                'tableAccountSize': 'سایز اکانت ($)',
+                'tableRiskPercent': 'درصد ریسک (%)',
+                'tableTradeType': 'نوع معامله',
+                'tableEntryPrice': 'قیمت ورود ($)',
+                'tableStopPrice': 'قیمت حد ضرر ($)',
+                'tableTpPrice': 'قیمت حد سود ($)',
+                'tableCalculatedSLPercent': 'درصد حد ضرر محاسبه شده (%)',
+                'tableRiskAmount': 'مقدار ریسک ($)',
+                'tablePositionValue': 'ارزش پوزیشن ($)',
+                'tableCoinAmount': 'تعداد کوین',
+                'tablePotentialProfit': 'سود احتمالی ($)',
+                'tablePotentialLoss': 'ضرر احتمالی ($)',
+                'tableRiskReward': 'ریسک به ریوارد',
+                'tableRequiredMargin': 'مارجین مورد نیاز ($)',
+                'tableLeverageUsed': 'اهرم استفاده شده',
+                'tableCurrencyPair': 'جفت ارز',
+                'tableStopPips': 'حد ضرر (پیپ)',
+                'tableTpPips': 'حد سود (پیپ)',
+                'tableLotSize': 'سایز لات (استاندارد)',
+                'tableUnits': 'واحدها (Units)',
+                'historyFutures': '**فیوچرز**',
+                'historyForex': '**فارکس**',
+                'historyTradeType': 'نوع معامله:',
+                'historyEntryPrice': 'قیمت ورود:',
+                'historyStopLoss': 'حد ضرر (SL):',
+                'historyTakeProfit': 'حد سود (TP):',
+                'historyPotentialProfit': 'سود احتمالی:',
+                'historyPotentialLoss': 'ضرر احتمالی:',
+                'historyRiskReward': 'ریسک به ریوارد:',
+                'historyCurrencyPair': 'جفت ارز:',
+                'historyStopPips': 'حد ضرر (پیپ):',
+                'historyTpPips': 'حد سود (پیپ):',
+                'historyLotSize': 'سایز لات:',
+            },
+            'en': {
+                'darkMode': '🌙 Dark Mode',
+                'lightMode': '☀️ Light Mode',
+                'goToFutures': '📈 Go to Forex ',
+                'goToForex': '📊 Go to Futures',
+                'language': '🌐 Language', // Changed to "Language" for English
+                'donate': '❤️ Donate', // Added translation for donate button
+                'usdtTron': 'USDT (TRC20):',
+                'tonMainnet': 'TON (Mainnet):',
+                'btcBitcoin': 'BTC (Bitcoin):',
+                'copied': 'Copied!',
+                'futuresTitle': 'Futures Risk Management Calculator',
+                'accountSize': 'Account Size (USD):',
+                'riskPercent': 'Risk Percentage (%):',
+                'currency': 'Currency:',
+                'entryPrice': 'Entry Price:',
+                'stopLossValue': 'Stop Loss Price or Percentage (SL):',
+                'takeProfitValue': 'Take Profit Price or Percentage (TP):',
+                'leverage': 'Leverage (X):',
+                'calculateLong': 'Calculate Long',
+                'calculateShort': 'Calculate Short',
+                'forexTitle': 'Forex Risk Management Calculator',
+                'currencyPair': 'Currency Pair:',
+                'stopLossPips': 'Stop Loss (Pips):',
+                'takeProfitPips': 'Take Profit (Pips):',
+                'historyTitle': 'Calculation History',
+                'clearHistory': 'Clear History',
+                'confirmClearHistory': 'Are you sure you want to clear all calculation history?',
+                'noHistory': '<li>No history yet.</li>',
+                'longPositionSLWarning': 'For a **long** position, the stop loss price must be **lower** than the entry price.',
+                'longPositionTPWarning': 'For a **long** position, the take profit price must be **higher** than the entry price.',
+                'shortPositionSLWarning': 'For a **short** position, the stop loss price must be **higher** than the entry price.',
+                'shortPositionTPWarning': 'For a **short** position, the take profit price must be **lower** than the entry price.',
+                'stopLossZeroWarning': 'The stop loss value results in zero or negative loss. Please adjust your stop loss.',
+                'pipStopLossPositiveWarning': 'Stop loss pips must be a positive number.',
+                'forexPairError': (pair) => `Error: Currency pair ${pair} cannot be calculated correctly.`,
+                'longPositionSLWarningForex': 'For a **long** position, stop loss pips should move the price **lower** than the entry price.',
+                'longPositionTPWarningForex': 'For a **long** position, take profit pips should move the price **higher** than the entry price.',
+                'shortPositionSLWarningForex': 'For a **short** position, stop loss pips should move the price **higher** than the entry price.',
+                'shortPositionTPWarningForex': 'For a **short** position, take profit pips should move the price **lower** than the entry price.',
+                'tableAccountSize': 'Account Size ($)',
+                'tableRiskPercent': 'Risk (%)',
+                'tableTradeType': 'Trade Type',
+                'tableEntryPrice': 'Entry Price ($)',
+                'tableStopPrice': 'Stop Price ($)',
+                'tableTpPrice': 'TP Price ($)',
+                'tableCalculatedSLPercent': 'Calculated SL (%)',
+                'tableRiskAmount': 'Risk Amount ($)',
+                'tablePositionValue': 'Position Value ($)',
+                'tableCoinAmount': 'Coin Amount',
+                'tablePotentialProfit': 'Potential Profit ($)',
+                'tablePotentialLoss': 'Potential Loss ($)',
+                'tableRiskReward': 'Risk to Reward',
+                'tableRequiredMargin': 'Required Margin ($)',
+                'tableLeverageUsed': 'Leverage Used',
+                'tableCurrencyPair': 'Currency Pair',
+                'tableStopPips': 'Stop Loss (Pips)',
+                'tableTpPips': 'Take Profit (Pips)',
+                'tableLotSize': 'Lot Size (Standard)',
+                'tableUnits': 'Units',
+                'historyFutures': '**Futures**',
+                'historyForex': '**Forex**',
+                'historyTradeType': 'Trade Type:',
+                'historyEntryPrice': 'Entry Price:',
+                'historyStopLoss': 'Stop Loss (SL):',
+                'historyTakeProfit': 'Take Profit (TP):',
+                'historyPotentialProfit': 'Potential Profit:',
+                'historyPotentialLoss': 'Potential Loss:',
+                'historyRiskReward': 'Risk to Reward:',
+                'historyCurrencyPair': 'Currency Pair:',
+                'historyStopPips': 'Stop Loss (Pips):',
+                'historyTpPips': 'Take Profit (Pips):',
+                'historyLotSize': 'Lot Size:',
+            }
+        };
+
+        function setLanguage(lang) {
+            currentLanguage = lang;
+            document.body.dir = lang === 'fa' ? 'rtl' : 'ltr';
+            document.documentElement.lang = lang; // Update html lang attribute
+            updateTextContent();
+            displayHistory(); // Re-display history to apply language
+            // Close the language dropdown after selection
+            document.getElementById('languageDropdownContent').classList.remove('show');
+        }
+
+        // Modified toggleLanguage to show/hide the dropdown
+        function toggleLanguageDropdown() {
+            // Close other dropdowns
+            document.getElementById('donateDropdownContent').classList.remove('show');
+            document.getElementById('languageDropdownContent').classList.toggle('show');
+        }
+
+        function toggleDonateDropdown() {
+            // Close other dropdowns
+            document.getElementById('languageDropdownContent').classList.remove('show');
+            document.getElementById('donateDropdownContent').classList.toggle('show');
+        }
+
+        // Function to copy text to clipboard
+        function copyToClipboard(text, element) {
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = element.textContent;
+                element.textContent = translations[currentLanguage].copied;
+                setTimeout(() => {
+                    element.textContent = originalText;
+                }, 1500); // Revert text after 1.5 seconds
+            }).catch(err => {
+                console.error('Failed to copy: ', err);
+            });
+        }
+
+
+        function updateTextContent() {
+            const lang = currentLanguage;
+            const t = translations[lang];
+
+            // Update buttons - target the span inside button
+            document.querySelector(".dark-toggle span").textContent = document.body.classList.contains("dark") ? t.lightMode : t.darkMode;
+            document.querySelector(".calculator-toggle span").textContent = currentCalculator === 'futures' ? t.goToFutures : t.goToForex;
+            
+            // Update the language button text based on the *current* active language for the dropdown
+            const langToggleBtnSpan = document.querySelector(".language-toggle span");
+            langToggleBtnSpan.textContent = t.language; // Set text based on translation
+
+            // Update donate button
+            document.querySelector(".donate-toggle span").textContent = t.donate;
+
+            // Update wallet names in donate dropdown
+            document.querySelector('.wallet-item:nth-of-type(1) span').textContent = t.usdtTron;
+            document.querySelector('.wallet-item:nth-of-type(2) span').textContent = t.tonMainnet;
+            document.querySelector('.wallet-item:nth-of-type(3) span').textContent = t.btcBitcoin;
+
+
+            // Update Futures Calculator
+            document.querySelector("#futuresCalculator h2").textContent = t.futuresTitle;
+            document.querySelector('label[for="futuresAccountSize"]').textContent = t.accountSize;
+            document.querySelector('label[for="futuresRiskPercent"]').textContent = t.riskPercent;
+            document.querySelector('label[for="currencyPair2"]').textContent = t.currency;
+            document.querySelector('label[for="futuresEntryPrice"]').textContent = t.entryPrice;
+            document.querySelector('label[for="futuresStopValue"]').textContent = t.stopLossValue;
+            document.querySelector('label[for="futuresTpValue"]').textContent = t.takeProfitValue;
+            document.querySelector('label[for="futuresLeverage"]').textContent = t.leverage;
+            document.querySelector('#futuresCalculator .long').textContent = t.calculateLong;
+            document.querySelector('#futuresCalculator .short').textContent = t.calculateShort;
+
+            // Update Forex Calculator
+            document.querySelector("#forexCalculator h2").textContent = t.forexTitle;
+            document.querySelector('label[for="forexAccountSize"]').textContent = t.accountSize;
+            document.querySelector('label[for="forexRiskPercent"]').textContent = t.riskPercent;
+            document.querySelector('label[for="currencyPair"]').textContent = t.currencyPair;
+            document.querySelector('label[for="forexEntryPrice"]').textContent = t.entryPrice;
+            document.querySelector('label[for="forexStopPips"]').textContent = t.stopLossPips;
+            document.querySelector('label[for="forexTpPips"]').textContent = t.takeProfitPips;
+            document.querySelector('label[for="forexLeverage"]').textContent = t.leverage;
+            document.querySelector('#forexCalculator .long').textContent = t.calculateLong;
+            document.querySelector('#forexCalculator .short').textContent = t.calculateShort;
+
+            // Update History Section
+            document.querySelector(".history-section h3").textContent = t.historyTitle;
+            document.querySelector(".clear-history-button").textContent = t.clearHistory;
+
+            // Update placeholders
+            document.getElementById("futuresAccountSize").placeholder = lang === 'fa' ? "مثال: 1000" : "Example: 1000";
+            document.getElementById("futuresRiskPercent").placeholder = lang === 'fa' ? "مثال: 1 (1%)" : "Example: 1 (1%)";
+            document.getElementById("futuresEntryPrice").placeholder = lang === 'fa' ? "مثال: 30000" : "Example: 30000";
+            document.getElementById("futuresStopValue").placeholder = lang === 'fa' ? "قیمت (مثال: 29500) یا درصد (مثال: 1.5)" : "Price (e.g., 29500) or percentage (e.g., 1.5)";
+            document.getElementById("futuresTpValue").placeholder = lang === 'fa' ? "قیمت (مثال: 31000) یا درصد (مثال: 3)" : "Price (e.g., 31000) or percentage (e.g., 3)";
+
+            document.getElementById("forexAccountSize").placeholder = lang === 'fa' ? "مثال: 5000" : "Example: 5000";
+            document.getElementById("forexRiskPercent").placeholder = lang === 'fa' ? "مثال: 0.5 (0.5%)" : "Example: 0.5 (0.5%)";
+            document.getElementById("forexEntryPrice").placeholder = lang === 'fa' ? "مثال: 1.08500" : "Example: 1.08500";
+            document.getElementById("forexStopPips").placeholder = lang === 'fa' ? "مثال: 20" : "Example: 20";
+            document.getElementById("forexTpPips").placeholder = lang === 'fa' ? "مثال: 60" : "Example: 60";
+        }
+
+
+        // --- Local Storage Functions ---
+        function saveCalculation(data) {
+            let history = loadCalcululations();
+            history.unshift(data); // Add new calculation to the beginning
+            localStorage.setItem('tradingCalculatorHistory', JSON.stringify(history));
+            displayHistory();
+        }
+
+        function loadCalcululations() {
+            const historyJSON = localStorage.getItem('tradingCalculatorHistory');
+            return historyJSON ? JSON.parse(historyJSON) : [];
+        }
+
+        function deleteCalculation(index) {
+            let history = loadCalcululations();
+            if (index > -1 && index < history.length) {
+                history.splice(index, 1); // Remove item at specific index
+                localStorage.setItem('tradingCalculatorHistory', JSON.stringify(history));
+                displayHistory(); // Refresh the display
+            }
+        }
+
+        function clearHistory() {
+            if (confirm(translations[currentLanguage].confirmClearHistory)) {
+                localStorage.removeItem('tradingCalculatorHistory');
+                displayHistory(); // Refresh the display
+            }
+        }
+
+        function displayHistory() {
+            const historyList = document.getElementById('historyList');
+            historyList.innerHTML = ''; // Clear previous history
+
+            const history = loadCalcululations();
+            const t = translations[currentLanguage];
+
+            if (history.length === 0) {
+                historyList.innerHTML = t.noHistory;
+                return;
+            }
+
+            history.forEach((calc, index) => {
+                const listItem = document.createElement('li');
+                const date = new Date(calc.timestamp).toLocaleString(currentLanguage === 'fa' ? 'fa-IR' : 'en-US', {
+                    year: 'numeric', month: '2-digit', day: '2-digit',
+                    hour: '2-digit', minute: '2-digit', second: '2-digit'
+                });
+
+                let details = '';
+                if (calc.type === 'futures') {
+                    details = `
+                        <div>
+                            <span>${t.historyFutures} - ${date}</span>
+                            <span>${t.historyTradeType} ${calc.tradeType === 'long' ? (currentLanguage === 'fa' ? 'لانگ' : 'Long') : (currentLanguage === 'fa' ? 'شورت' : 'Short')}</span>
+                            <span>${t.historyEntryPrice} $${calc.entryPrice}</span>
+                            <span>${calc.stopPrice !== undefined ? `${t.historyStopLoss} $${calc.stopPrice}` : ''}</span>
+                            <span>${calc.tpPrice !== undefined ? `${t.historyTakeProfit} $${calc.tpPrice}` : ''}</span>
+                            <span>${calc.totalProfitDollar !== undefined ? `${t.historyPotentialProfit} $${calc.totalProfitDollar}` : ''}</span>
+                            <span>${calc.totalLossDollar !== undefined ? `${t.historyPotentialLoss} $${calc.totalLossDollar}` : ''}</span>
+                            <span>${calc.riskRewardRatio !== undefined ? `${t.historyRiskReward} ${calc.riskRewardRatio} : 1` : ''}</span>
+                        </div>
+                        <button onclick="deleteCalculation(${index})" class="delete-btn">🗑️</button>
+                    `;
+                } else if (calc.type === 'forex') {
+                    details = `
+                        <div>
+                            <span>${t.historyForex} - ${date}</span>
+                            <span>${t.historyCurrencyPair} ${calc.currencyPair}</span>
+                            <span>${t.historyTradeType} ${calc.tradeType === 'long' ? (currentLanguage === 'fa' ? 'لانگ' : 'Long') : (currentLanguage === 'fa' ? 'شورت' : 'Short')}</span>
+                            <span>${t.historyEntryPrice} ${calc.entryPrice}</span>
+                            <span>${calc.stopPips !== undefined ? `${t.historyStopPips} ${calc.stopPips}` : ''}</span>
+                            <span>${calc.tpPips !== undefined ? `${t.historyTpPips} ${calc.tpPips}` : ''}</span>
+                            <span>${calc.lotSize !== undefined ? `${t.historyLotSize} ${calc.lotSize}` : ''}</span>
+                            <span>${calc.potentialProfitDollar !== undefined ? `${t.historyPotentialProfit} $${calc.potentialProfitDollar}` : ''}</span>
+                            <span>${calc.potentialLossDollar !== undefined ? `${t.historyPotentialLoss} $${calc.potentialLossDollar}` : ''}</span>
+                            <span>${calc.riskRewardRatio !== undefined ? `${t.historyRiskReward} ${calc.riskRewardRatio} : 1` : ''}</span>
+                        </div>
+                        <button onclick="deleteCalculation(${index})" class="delete-btn">🗑️</button>
+                    `;
+                }
+                listItem.innerHTML = details;
+                historyList.appendChild(listItem);
+            });
+        }
+
+
+        // --- Futures Calculator Logic ---
+        function calculateFutures(tradeType) {
+            let accountSize = parseFloat(document.getElementById("futuresAccountSize").value);
+            let riskPercent = parseFloat(document.getElementById("futuresRiskPercent").value);
+            let entryPrice = parseFloat(document.getElementById("futuresEntryPrice").value);
+            let stopValue = parseFloat(document.getElementById("futuresStopValue").value);
+            let tpValue = parseFloat(document.getElementById("futuresTpValue").value);
+            let leverage = parseFloat(document.getElementById("futuresLeverage").value);
+            const output = document.getElementById("output");
+            const t = translations[currentLanguage];
+
+
+            // Set random values if inputs are empty or invalid
+            if (isNaN(accountSize) || accountSize <= 0) accountSize = getRandomInRange(1000, 5000);
+            if (isNaN(riskPercent) || riskPercent <= 0) riskPercent = getRandomInRange(1, 3);
+            if (isNaN(entryPrice) || entryPrice <= 0) entryPrice = getRandomInRange(100, 1000);
+            if (isNaN(stopValue) || stopValue <= 0) stopValue = getRandomInRange(1, 5); // Default to percentage
+            if (isNaN(tpValue) || tpValue <= 0) tpValue = getRandomInRange(5, 20); // Default to percentage
+
+            const allowedLeverages = [1, 3, 5, 10, 15, 20, 50, 100];
+            if (isNaN(leverage) || !allowedLeverages.includes(leverage)) {
+                leverage = allowedLeverages[Math.floor(Math.random() * allowedLeverages.length)];
+            }
+
+            const isSLpercent = (stopValue < 20 && stopValue > 0.001 && Math.abs(stopValue / entryPrice) * 100 < 50); // Stop loss % is usually small
+            const isTPpercent = (tpValue < 100 && tpValue > 0.001 && Math.abs(tpValue / entryPrice) * 100 < 200); // Take profit % can be larger
+
+            let stopPrice, tpPrice;
+
+            if (tradeType === 'long') {
+                stopPrice = isSLpercent ? entryPrice * (1 - stopValue / 100) : stopValue;
+                tpPrice = isTPpercent ? entryPrice * (1 + tpValue / 100) : tpValue;
+
+                if (stopPrice >= entryPrice) {
+                    output.style.display = "block";
+                    output.innerHTML = t.longPositionSLWarning;
+                    return;
+                }
+                if (tpPrice <= entryPrice) {
+                    output.style.display = "block";
+                    output.innerHTML = t.longPositionTPWarning;
+                    return;
+                }
+            } else { // tradeType === 'short'
+                stopPrice = isSLpercent ? entryPrice * (1 + stopValue / 100) : stopValue;
+                tpPrice = isTPpercent ? entryPrice * (1 - tpValue / 100) : tpValue;
+
+                if (stopPrice <= entryPrice) {
+                    output.style.display = "block";
+                    output.innerHTML = t.shortPositionSLWarning;
+                    return;
+                }
+                if (tpPrice >= entryPrice) {
+                    output.style.display = "block";
+                    output.innerHTML = t.shortPositionTPWarning;
+                    return;
+                }
+            }
+
+            const riskAmount = (riskPercent / 100) * accountSize;
+
+            let lossPerCoin;
+            if (tradeType === 'long') {
+                lossPerCoin = entryPrice - stopPrice;
+            } else {
+                lossPerCoin = stopPrice - entryPrice;
+            }
+
+            if (lossPerCoin <= 0) {
+                output.style.display = "block";
+                output.innerHTML = t.stopLossZeroWarning;
+                return;
+            }
+
+            const positionSizeCoin = riskAmount / lossPerCoin;
+            const positionValue = positionSizeCoin * entryPrice;
+
+            let profitPerCoin;
+            if (tradeType === 'long') {
+                profitPerCoin = tpPrice - entryPrice;
+            } else {
+                profitPerCoin = entryPrice - tpPrice;
+            }
+
+            const totalProfitDollar = profitPerCoin * positionSizeCoin;
+            const actualTotalLossDollar = riskAmount;
+
+            const calculatedStopLossPercent = (lossPerCoin / entryPrice) * 100;
+            const riskRewardRatio = actualTotalLossDollar > 0 ? (totalProfitDollar / actualTotalLossDollar) : 0;
+            const requiredMargin = positionValue / leverage;
+
+            output.style.display = "block";
+            output.innerHTML = `
+                <table>
+                    <tr><th>${t.tableAccountSize}</th><td>${accountSize.toFixed(2)}</td></tr>
+                    <tr><th>${t.tableRiskPercent}</th><td>${riskPercent.toFixed(2)}%</td></tr>
+                    <tr><th>${t.tableTradeType}</th><td>${tradeType === 'long' ? (currentLanguage === 'fa' ? 'لانگ' : 'Long') : (currentLanguage === 'fa' ? 'شورت' : 'Short')}</td></tr>
+                    <tr><th>${t.tableEntryPrice}</th><td>${entryPrice.toFixed(2)}</td></tr>
+                    <tr><th>${t.tableStopPrice}</th><td>${stopPrice.toFixed(2)}</td></tr>
+                    <tr><th>${t.tableTpPrice}</th><td>${tpPrice.toFixed(2)}</td></tr>
+                    <tr><th>${t.tableCalculatedSLPercent}</th><td>${calculatedStopLossPercent.toFixed(2)}%</td></tr>
+                    <tr><th>${t.tableRiskAmount}</th><td>${riskAmount.toFixed(2)}</td></tr>
+                    <tr><th>${t.tablePositionValue}</th><td>${positionValue.toFixed(2)}</td></tr>
+                    <tr><th>${t.tableCoinAmount}</th><td>${positionSizeCoin.toFixed(4)}</td></tr>
+                    <tr><th>${t.tablePotentialProfit}</th><td>${totalProfitDollar.toFixed(2)}</td></tr>
+                    <tr><th>${t.tablePotentialLoss}</th><td>${actualTotalLossDollar.toFixed(2)}</td></tr>
+                    <tr><th>${t.tableRiskReward}</th><td>${riskRewardRatio.toFixed(2)} : 1</td></tr>
+                    <tr><th>${t.tableRequiredMargin}</th><td>${requiredMargin.toFixed(2)}</td></tr>
+                    <tr><th>${t.tableLeverageUsed}</th><td>x${leverage}</td></tr>
+                </table>
+            `;
+
+            saveCalculation({
+                type: 'futures',
+                timestamp: new Date().toISOString(),
+                accountSize: accountSize.toFixed(2),
+                riskPercent: riskPercent.toFixed(2),
+                tradeType: tradeType,
+                entryPrice: entryPrice.toFixed(2),
+                stopPrice: stopPrice.toFixed(2),
+                tpPrice: tpPrice.toFixed(2),
+                stopLossPercent: calculatedStopLossPercent.toFixed(2),
+                riskAmount: riskAmount.toFixed(2),
+                positionSizeDollar: positionValue.toFixed(2),
+                positionSizeCoin: positionSizeCoin.toFixed(4),
+                totalProfitDollar: totalProfitDollar.toFixed(2),
+                totalLossDollar: actualTotalLossDollar.toFixed(2),
+                riskRewardRatio: riskRewardRatio.toFixed(2),
+                requiredMargin: requiredMargin.toFixed(2),
+                leverage: leverage
+            });
+        }
+
+        // --- Forex Calculator Logic ---
+        async function calculateForex(tradeType) {
+            let accountSize = parseFloat(document.getElementById("forexAccountSize").value);
+            let riskPercent = parseFloat(document.getElementById("forexRiskPercent").value);
+            let entryPrice = parseFloat(document.getElementById("forexEntryPrice").value);
+            let stopPips = parseFloat(document.getElementById("forexStopPips").value);
+            let tpPips = parseFloat(document.getElementById("forexTpPips").value);
+            let leverage = parseFloat(document.getElementById("forexLeverage").value);
+            const currencyPair = document.getElementById("currencyPair").value;
+            const output = document.getElementById("output");
+            const t = translations[currentLanguage];
+
+            const contractSize = 100000;
+
+            // Input validation and random value assignment
+            if (isNaN(accountSize) || accountSize <= 0) accountSize = getRandomInRange(1000, 5000);
+            if (isNaN(riskPercent) || riskPercent <= 0) riskPercent = getRandomInRange(0.5, 3);
+            if (isNaN(entryPrice) || entryPrice <= 0) {
+                if (currencyPair.includes("JPY") || currencyPair === "XAUUSD") {
+                    entryPrice = getRandomInRange(100, 2000, 2);
+                } else {
+                    entryPrice = getRandomInRange(0.8, 1.5, 5);
+                }
+            }
+            if (isNaN(stopPips) || stopPips <= 0) stopPips = getRandomInRange(10, 50);
+            if (isNaN(tpPips) || tpPips <= 0) tpPips = getRandomInRange(50, 200);
+
+            const allowedLeverages = [10, 30, 50, 100, 200, 400, 500];
+            if (isNaN(leverage) || !allowedLeverages.includes(leverage)) {
+                leverage = allowedLeverages[3]; // Default to 100x if not valid
+            }
+
+            const riskAmount = (riskPercent / 100) * accountSize;
+
+            if (stopPips <= 0) {
+                output.style.display = "block";
+                output.innerHTML = t.pipStopLossPositiveWarning;
+                return;
+            }
+
+            let dollarValuePerPipPerUnit;
+            let pricePrecision;
+
+            if (currencyPair.includes("JPY")) {
+                dollarValuePerPipPerUnit = 0.01 * (1 / entryPrice);
+                pricePrecision = 3; // JPY pairs usually 2 decimal places after integer part, so 3 total
+            } else if (currencyPair === "XAUUSD") {
+                dollarValuePerPipPerUnit = 0.01;
+                pricePrecision = 2; // Gold typically 2 decimal places
+            } else if (currencyPair.substring(3, 6) === "USD") {
+                dollarValuePerPipPerUnit = 0.0001;
+                pricePrecision = 5; // Standard 5 decimal places for major pairs
+            } else if (currencyPair.substring(0, 3) === "USD") {
+                dollarValuePerPipPerUnit = 0.0001 * (1 / entryPrice);
+                pricePrecision = 5;
+            } else {
+                output.style.display = "block";
+                output.innerHTML = t.forexPairError(currencyPair);
+                return;
+            }
+
+            const units = riskAmount / (stopPips * dollarValuePerPipPerUnit);
+            const lotSize = units / contractSize;
+
+            let potentialProfitDollar = (tpPips * dollarValuePerPipPerUnit) * units;
+            let potentialLossDollar = riskAmount; // Defined by risk amount
+
+            let stopPrice, tpPrice;
+            const pipFactor = currencyPair.includes("JPY") || currencyPair === "XAUUSD" ? 0.01 : 0.0001;
+
+            if (tradeType === 'long') {
+                stopPrice = entryPrice - (stopPips * pipFactor);
+                tpPrice = entryPrice + (tpPips * pipFactor);
+
+                if (stopPrice >= entryPrice) {
+                    output.style.display = "block";
+                    output.innerHTML = t.longPositionSLWarningForex;
+                    return;
+                }
+                if (tpPrice <= entryPrice) {
+                    output.style.display = "block";
+                    output.innerHTML = t.longPositionTPWarningForex;
+                    return;
+                }
+            } else { // tradeType === 'short'
+                stopPrice = entryPrice + (stopPips * pipFactor);
+                tpPrice = entryPrice - (tpPips * pipFactor);
+
+                if (stopPrice <= entryPrice) {
+                    output.style.display = "block";
+                    output.innerHTML = t.shortPositionSLWarningForex;
+                    return;
+                }
+                if (tpPrice >= entryPrice) {
+                    output.style.display = "block";
+                    output.innerHTML = t.shortPositionTPWarningForex;
+                    return;
+                }
+            }
+
+            const riskRewardRatio = potentialLossDollar > 0 ? (potentialProfitDollar / potentialLossDollar) : 0;
+            const requiredMargin = (entryPrice * units) / leverage;
+
+            output.style.display = "block";
+            output.innerHTML = `
+                <table>
+                    <tr><th>${t.tableAccountSize}</th><td>${accountSize.toFixed(2)}</td></tr>
+                    <tr><th>${t.tableRiskPercent}</th><td>${riskPercent.toFixed(2)}%</td></tr>
+                    <tr><th>${t.tableTradeType}</th><td>${tradeType === 'long' ? (currentLanguage === 'fa' ? 'لانگ' : 'Long') : (currentLanguage === 'fa' ? 'شورت' : 'Short')}</td></tr>
+                    <tr><th>${t.tableCurrencyPair}</th><td>${currencyPair}</td></tr>
+                    <tr><th>${t.tableEntryPrice}</th><td>${entryPrice.toFixed(pricePrecision)}</td></tr>
+                    <tr><th>${t.tableStopPips}</th><td>${stopPips.toFixed(0)}</td></tr>
+                    <tr><th>${t.tableTpPips}</th><td>${tpPips.toFixed(0)}</td></tr>
+                    <tr><th>${t.tableStopPrice}</th><td>${stopPrice.toFixed(pricePrecision)}</td></tr>
+                    <tr><th>${t.tableTpPrice}</th><td>${tpPrice.toFixed(pricePrecision)}</td></tr>
+                    <tr><th>${t.tableLotSize}</th><td>${lotSize.toFixed(2)}</td></tr>
+                    <tr><th>${t.tableUnits}</th><td>${units.toFixed(0)}</td></tr>
+                    <tr><th>${t.tableRiskAmount}</th><td>${riskAmount.toFixed(2)}</td></tr>
+                    <tr><th>${t.tablePotentialProfit}</th><td>${potentialProfitDollar.toFixed(2)}</td></tr>
+                    <tr><th>${t.tablePotentialLoss}</th><td>${potentialLossDollar.toFixed(2)}</td></tr>
+                    <tr><th>${t.tableRiskReward}</th><td>${riskRewardRatio.toFixed(2)} : 1</td></tr>
+                    <tr><th>${t.tableRequiredMargin}</th><td>${requiredMargin.toFixed(2)}</td></tr>
+                    <tr><th>${t.tableLeverageUsed}</th><td>x${leverage}</td></tr>
+                </table>
+            `;
+
+            saveCalculation({
+                type: 'forex',
+                timestamp: new Date().toISOString(),
+                accountSize: accountSize.toFixed(2),
+                riskPercent: riskPercent.toFixed(2),
+                tradeType: tradeType,
+                currencyPair: currencyPair,
+                entryPrice: entryPrice.toFixed(pricePrecision),
+                stopPips: stopPips.toFixed(0),
+                tpPips: tpPips.toFixed(0),
+                stopPrice: stopPrice.toFixed(pricePrecision),
+                tpPrice: tpPrice.toFixed(pricePrecision),
+                lotSize: lotSize.toFixed(2),
+                units: units.toFixed(0),
+                riskAmount: riskAmount.toFixed(2),
+                potentialProfitDollar: potentialProfitDollar.toFixed(2),
+                potentialLossDollar: potentialLossDollar.toFixed(2),
+                riskRewardRatio: riskRewardRatio.toFixed(2),
+                requiredMargin: requiredMargin.toFixed(2),
+                leverage: leverage
+            });
+        }
+
+        // --- Initial Load & Event Listeners ---
+        window.onload = function() {
+            // Set dark mode based on system preference
+            if(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                document.body.classList.add('dark');
+            }
+            // Initial call to updateTextContent to set the correct text for dark mode toggle
+            updateTextContent();
+
+            // Set initial calculator view (Forex by default)
+            document.getElementById('futuresCalculator').style.display = 'none';
+            document.getElementById('forexCalculator').style.display = 'block';
+            currentCalculator = 'forex'; // Ensure global state matches
+            updateTextContent(); // Update text for calculator toggle
+
+            // Set default leverage for forex to 100x
+            document.getElementById('forexLeverage').value = '100';
+
+            setLanguage('fa'); // Set initial language to Farsi
+
+            displayHistory();
+
+            // Event listener for the language button to toggle dropdown
+            document.querySelector('.language-toggle').addEventListener('click', function(event) {
+                event.stopPropagation(); // Prevent document click from closing it immediately
+                toggleLanguageDropdown();
+            });
+
+            // Event listener for the donate button to toggle dropdown
+            document.querySelector('.donate-toggle').addEventListener('click', function(event) {
+                event.stopPropagation(); // Prevent document click from closing it immediately
+                toggleDonateDropdown();
+            });
+
+            // Event listeners for language options in the dropdown
+            document.querySelectorAll('.language-dropdown-content a').forEach(item => {
+                item.addEventListener('click', function(event) {
+                    event.preventDefault(); // Prevent default link behavior
+                    const selectedLang = this.getAttribute('data-lang');
+                    setLanguage(selectedLang);
+                });
+            });
+
+            // Event listeners for copying wallet addresses
+            document.querySelectorAll('.wallet-address').forEach(walletDiv => {
+                const copyIcon = walletDiv.querySelector('.copy-icon');
+                if (copyIcon) {
+                    copyIcon.addEventListener('click', function(event) {
+                        event.stopPropagation(); // Prevent dropdown from closing if it's open
+                        const address = walletDiv.getAttribute('data-address');
+                        const addressTextElement = walletDiv.querySelector('span'); // The span containing the visible address
+                        copyToClipboard(address, addressTextElement);
+                    });
+                }
+            });
+
+
+            // Close any dropdown if the user clicks outside of it
+            document.addEventListener('click', function(event) {
+                const languageDropdown = document.getElementById('languageDropdownContent');
+                const languageToggleButton = document.querySelector('.language-toggle');
+                const donateDropdown = document.getElementById('donateDropdownContent');
+                const donateToggleButton = document.querySelector('.donate-toggle');
+
+                if (!languageToggleButton.contains(event.target) && !languageDropdown.contains(event.target)) {
+                    languageDropdown.classList.remove('show');
+                }
+                if (!donateToggleButton.contains(event.target) && !donateDropdown.contains(event.target)) {
+                    donateDropdown.classList.remove('show');
+                }
+            });
+        }
+
+        // Listen for system dark mode changes
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+            if(e.matches) {
+                document.body.classList.add('dark');
+            } else {
+                document.body.classList.remove('dark');
+            }
+            updateTextContent(); // Update dark mode button text
+        });
+
+    </script>
+</body>
+</html>
