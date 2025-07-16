@@ -6,77 +6,70 @@
     <title>ماشین حساب</title>
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
-/* Removed Sahel font import as Persian is removed */
 
 :root {
     font-size: 21px;
-    /* Light Mode Colors - More Vibrant & Fresh */
-    --bg-color: linear-gradient(135deg,#A97458, #e6f7ff); /* Very Light Blue Sky Gradient */
-    --text-color: #3f51b5; /* Deeper Indigo Text */
-    --card-bg: #D4AF37; /* Pure White Card */
-    --input-bg: #F5DEB3; /* Very light off-white for inputs */
-    --label-color: #3f51b5; /* Deeper Indigo Label */
-    /* Updated Light Mode Table Colors */
-    --table-header: linear-gradient(135deg, #673ab7, #9575cd); /* Amethyst Purple Header */
-    --table-bg: #f3e5f5; /* Very Light Purple for Table Rows */
-    --hover-bg: #ede7f6; /* Gentle Light Purple Hover */
-    --result-bg: #e8f5e9; /* Light Greenish for Result */
-    --result-text: #2e7d32; /* Darker Green for Result Text */
-    --button-long-bg: linear-gradient(135deg, #4CAF50, #66BB6A); /* Classic Green */
+    --bg-color: linear-gradient(135deg,#A97458, #e6f7ff);
+    --text-color: #3f51b5;
+    --card-bg: #D4AF37;
+    --input-bg: #F5DEB3;
+    --label-color: #3f51b5;
+    --table-header: linear-gradient(135deg, #673ab7, #9575cd);
+    --table-bg: #f3e5f5;
+    --hover-bg: #ede7f6;
+    --result-bg: #e8f5e9;
+    --result-text: #2e7d32;
+    --button-long-bg: linear-gradient(135deg, #4CAF50, #66BB6A);
     --button-long-hover: linear-gradient(135deg, #66BB6A, #4CAF50);
-    --button-short-bg: linear-gradient(135deg, #F44336, #EF5350); /* Classic Red */
+    --button-short-bg: linear-gradient(135deg, #F44336, #EF5350);
     --button-short-hover: linear-gradient(135deg, #EF5350, #F44336);
-    --history-bg: #faffff; /* Consistent Light Background */
-    --history-border: #d1c4e9; /* Light Purple Border */
-    --clear-button-bg: #F44336; /* Matching Red for Clear */
+    --history-bg: #faffff;
+    --history-border: #d1c4e9;
+    --clear-button-bg: #F44336;
     --clear-button-hover: #d32f2f;
-    --delete-btn-color: #F44336; /* Matching Delete Button */
-    /* Updated Light Mode Toggle Button Colors */
-    --toggle-button-bg: linear-gradient(135deg, #9e9e9e, #757575); /* Medium Grey for button in light mode */
-    --toggle-button-hover: linear-gradient(135deg, #757575, #9e9e9e); /* Slightly darker grey on hover */
-    /* Dropdown specific colors */
+    --delete-btn-color: #F44336;
+    --toggle-button-bg: linear-gradient(135deg, #9e9e9e, #757575);
+    --toggle-button-hover: linear-gradient(135deg, #757575, #9e9e9e);
     --dropdown-bg: #ffffff;
     --dropdown-hover-bg: #f5f5f5;
     --dropdown-text-color: #424242;
-    --wallet-address-bg: #e0f2f7; /* Light background for wallet addresses */
-    --wallet-address-border: #aeddf9; /* Border for wallet addresses */
-    --copy-icon-color: #4a6c8e; /* Color for copy icon */
+    --wallet-address-bg: #e0f2f7;
+    --wallet-address-border: #aeddf9;
+    --copy-icon-color: #4a6c8e;
 }
 
 body.dark {
-    /* Dark Mode Colors - Deeper & Richer */
-    --bg-color: linear-gradient(to right, #2C5364, #203A43, #0F2027); /* Deep Night Blue Gradient */
-    --text-color: #fdd835; /* Soft Off-White Text */
-    --card-bg: #223a5e; /* Darker Card Background */
-    --input-bg: #2d4670; /* Darker Input Fields */
-    --label-color: #fdd835; /* Lighter Blue Label */
-    --table-header: #fff9c4; /* Muted Deep Blue Header */
-    --table-bg: #3c5a8a; /* Darker Table Rows */
-    --hover-bg: #4f73aa; /* More Distinct Hover */
-    --result-bg: #3d5a8c; /* Darker Result Box */
-    --result-text: #c8e8ff; /* Lighter Blue Result Text */
-    --button-long-bg: linear-gradient(135deg, #1a7345, #22995e); /* Deeper, more sophisticated green */
+    --bg-color: linear-gradient(to right, #2C5364, #203A43, #0F2027);
+    --text-color: #fdd835;
+    --card-bg: #223a5e;
+    --input-bg: #2d4670;
+    --label-color: #fdd835;
+    --table-header: #fff9c4;
+    --table-bg: #3c5a8a;
+    --hover-bg: #4f73aa;
+    --result-bg: #3d5a8c;
+    --result-text: #c8e8ff;
+    --button-long-bg: linear-gradient(135deg, #1a7345, #22995e);
     --button-long-hover: linear-gradient(135deg, #22995e, #1a7345);
-    --button-short-bg: linear-gradient(135deg, #8a3f4e, #a85a6b); /* Deeper, more sophisticated red */
+    --button-short-bg: linear-gradient(135deg, #8a3f4e, #a85a6b);
     --button-short-hover: linear-gradient(135deg, #a85a6b, #8a3f4e);
-    --history-bg: #223a5e; /* Same as Card Background */
-    --history-border: #4A7BA8; /* Consistent with Table Header */
-    --clear-button-bg: #a84f5f; /* Darker Sophisticated Red */
+    --history-bg: #223a5e;
+    --history-border: #4A7BA8;
+    --clear-button-bg: #a84f5f;
     --clear-button-hover: #914251;
-    --delete-btn-color: #ff99a0; /* Lighter Red for Dark Mode Delete */
-    --toggle-button-bg: var(--bg-color); /* Match background */
-    --toggle-button-hover: var(--hover-bg); /* Use hover color for consistency */
-    /* Dropdown specific colors for dark mode */
+    --delete-btn-color: #ff99a0;
+    --toggle-button-bg: var(--bg-color);
+    --toggle-button-hover: var(--hover-bg);
     --dropdown-bg: #2c476b;
     --dropdown-hover-bg: #3a5c8a;
     --dropdown-text-color: #e3f2fd;
-    --wallet-address-bg: #3c5a8a; /* Darker background for wallet addresses */
-    --wallet-address-border: #4f73aa; /* Darker border for wallet addresses */
-    --copy-icon-color: #c8e8ff; /* Lighter color for copy icon */
+    --wallet-address-bg: #3c5a8a;
+    --wallet-address-border: #4f73aa;
+    --copy-icon-color: #c8e8ff;
 }
 
 body {
-    font-family: 'Poppins', sans-serif; /* Changed to Poppins only */
+    font-family: 'Poppins', sans-serif;
     background: var(--bg-color);
     padding: 30px;
     color: var(--text-color);
@@ -86,7 +79,7 @@ body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    direction: ltr; /* Changed to LTR */
+    direction: ltr;
     font-size: 20px;
 }
 
@@ -99,7 +92,7 @@ h2 {
 
 .container {
     background: var(--card-bg);
-    max-width: 800px; /* Increased max-width for larger table */
+    max-width: 800px;
     margin: auto;
     padding: 35px 40px;
     border-radius: 20px;
@@ -110,7 +103,7 @@ h2 {
 
 label {
     display: block;
-    text-align: left; /* Changed to left */
+    text-align: left;
     margin: 22px 0 8px;
     font-weight: 600;
     font-size: 24px;
@@ -144,7 +137,7 @@ input[type="text"] {
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
-    text-align: left; /* Changed to left */
+    text-align: left;
     box-shadow: inset 0 1px 3px rgba(0,0,0,0.06);
 }
 
@@ -162,11 +155,10 @@ select {
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
-    text-align: left; /* Changed to left */
+    text-align: left;
     box-shadow: inset 0 1px 3px rgba(0,0,0,0.06);
     padding-left: 18px;
 }
-
 
 body.dark input[type="number"],
 body.dark input[type="text"],
@@ -180,7 +172,7 @@ input[type="number"]::placeholder,
 input[type="text"]::placeholder {
     color: #95a5a6;
     font-style: italic;
-    text-align: left; /* Changed to left */
+    text-align: left;
 }
 
 body.dark input[type="number"]::placeholder,
@@ -220,7 +212,7 @@ button {
     cursor: pointer;
     transition: all 0.3s ease;
     box-shadow: 0 6px 15px rgba(0,0,0,0.12);
-    font-family: 'Poppins', sans-serif; /* Changed to Poppins only */
+    font-family: 'Poppins', sans-serif;
 }
 
 body:not(.dark) button {
@@ -267,7 +259,7 @@ button.short:hover {
     font-weight: 600;
     box-shadow: 0 5px 20px rgba(0,0,0,0.1);
     transition: background 0.4s, color 0.4s, box-shadow 0.4s;
-    text-align: left; /* Changed to left */
+    text-align: left;
     min-height: 250px;
     display: flex;
     align-items: center;
@@ -276,50 +268,49 @@ button.short:hover {
 }
 
 .result span {
-    font-family: 'Poppins', sans-serif; /* Changed to Poppins only */
+    font-family: 'Poppins', sans-serif;
 }
 
 table {
     width: 100%;
-    /* Increased table size - now fills the larger container */
-    max-width: 100%; /* Ensure it takes full width of parent container */
-    margin: 18px auto; /* Center the table and add margin */
+    max-width: 100%;
+    margin: 18px auto;
     border-collapse: separate;
     border-spacing: 0 10px;
     font-weight: 600;
-    font-size: 22px; /* Slightly increased font size for a larger look */
-    text-align: left; /* Changed to left */
+    font-size: 22px;
+    text-align: left;
     transition: background 0.4s, color 0.4s;
 }
 
 th, td {
-    padding: 16px 22px; /* Slightly increased padding for a larger look */
+    padding: 16px 22px;
     border-radius: 14px;
     background: var(--table-bg);
     color: var(--text-color);
     transition: background 0.4s, color 0.4s, background-color 0.3s;
-    text-align: left; /* Changed to left */
-    font-family: 'Poppins', sans-serif; /* Changed to Poppins only */
+    text-align: left;
+    font-family: 'Poppins', sans-serif;
 }
 
 th {
     background-color: var(--table-header);
-    color: white; /* Changed text color to white for better contrast */
-    text-align: left; /* Changed to left */
-    border-top-right-radius: 0; /* Adjusted for LTR */
-    border-top-left-radius: 14px; /* Adjusted for LTR */
+    color: white;
+    text-align: left;
+    border-top-right-radius: 0;
+    border-top-left-radius: 14px;
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
 }
 
 table tr:last-child td:first-child {
-    border-bottom-right-radius: 0; /* Adjusted for LTR */
-    border-bottom-left-radius: 14px; /* Adjusted for LTR */
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius:  Впервые в истории: 14px;
 }
 
 table tr:last-child td:last-child {
-    border-bottom-left-radius: 0; /* Adjusted for LTR */
-    border-bottom-right-radius: 14px; /* Adjusted for LTR */
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 14px;
 }
 
 tr:hover td {
@@ -329,7 +320,7 @@ tr:hover td {
 .fixed-settings-buttons {
     position: fixed;
     top: 20px;
-    right: 20px; /* Kept right for dark mode button, as language is removed */
+    right: 20px;
     display: flex;
     flex-direction: column;
     gap: 12px;
@@ -343,9 +334,9 @@ tr:hover td {
     font-size: 22px;
     font-weight: 500;
     border-radius: 16px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    box Greenwich Mean Time-shadow: 0 4px 10px rgba(0,0,0,0.1);
     background: var(--toggle-button-bg);
-    color: white; /* Ensure text color is white for visibility on dark buttons */
+    color: white;
     transition: all 0.3s ease;
     display: flex;
     align-items: center;
@@ -360,28 +351,23 @@ tr:hover td {
     box-shadow: 0 6px 12px rgba(0,0,0,0.2);
 }
 
-/* Light mode specific style for the dark mode toggle button */
 body:not(.dark) .dark-toggle {
-    background: linear-gradient(135deg, #007bff, #0056b3); /* Blue background for Light Mode 'Dark Mode' button */
+    background: linear-gradient(135deg, #007bff, #0056b3);
 }
 
 body:not(.dark) .dark-toggle:hover {
-    background: linear-gradient(135deg, #0056b3, #007bff); /* Darker blue on hover */
+    background: linear-gradient(135deg, #0056b3, #007bff);
 }
-
 
 .fixed-settings-buttons button svg {
     width: 18px;
     height: 18px;
-    fill: white; /* Ensure SVG fill is white for visibility on dark buttons */
+    fill: white;
 }
 
-/* Removed language-dropdown and language-dropdown-content styles */
-
-/* Copy icon style */
 .copy-icon {
     cursor: pointer;
-    margin-left: 10px; /* Changed to margin-left for LTR */
+    margin-left: 10px;
     width: 18px;
     height: 18px;
     vertical-align: middle;
@@ -393,7 +379,6 @@ body:not(.dark) .dark-toggle:hover {
     fill: #5cb8e0;
 }
 
-/* Responsive adjustments */
 @media (max-width: 768px) {
     :root {
         font-size: 18px;
@@ -421,10 +406,8 @@ body:not(.dark) .dark-toggle:hover {
         height: 16px;
     }
 
-    /* Removed .language-dropdown-content responsive style */
-
     .container {
-        max-width: 100%; /* Adjust for smaller screens */
+        max-width: 100%;
         padding: 25px 20px;
         border-radius: 16px;
     }
@@ -469,12 +452,12 @@ body:not(.dark) .dark-toggle:hover {
     }
 
     table {
-        font-size: 20px; /* Adjusted for smaller screens */
+        font-size: 20px;
         border-spacing: 0 8px;
     }
 
     th, td {
-        padding: 14px 18px; /* Adjusted for smaller screens */
+        padding: 14px 18px;
         border-radius: 12px;
     }
 }
@@ -514,8 +497,6 @@ body:not(.dark) .dark-toggle:hover {
         display: none;
     }
 
-    /* Removed .language-dropdown-content responsive style */
-
     .container {
         padding: 15px 12px;
         border-radius: 12px;
@@ -541,64 +522,104 @@ body:not(.dark) .dark-toggle:hover {
     }
 
     .button-group {
-        gap: 10px;
-    }
+        button-group {
+    gap: 10px;
+}
 
-    button {
-        padding: 10px 15px;
-        font-size: 16px;
-        border-radius: 8px;
-    }
+button {
+    padding: 10px 15px;
+    font-size: 16px;
+    border-radius: 8px;
+}
 
-    .result {
-        padding: 15px 20px;
-        font-size: 16px;
-        border-radius: 10px;
-        margin-top: 20px;
-        min-height: 180px;
-    }
+.result {
+    padding: 15px 20px;
+    font-size: 16px;
+    border-radius: 10px;
+    margin-top: 20px;
+    min-height: 180px;
+}
 
-    table {
-        font-size: 16px; /* Adjusted for smaller screens */
-        border-spacing: 0 6px;
-    }
+table {
+    font-size: 16px;
+    border-spacing: 0 6px;
+}
 
-    th, td {
-        padding: 10px 12px;
-        border-radius: 10px;
-    }
+th, td {
+    padding: 10px 12px;
+    border-radius: 10px;
 }
 </style>
 </head>
 <body>
-
     <div class="fixed-settings-buttons">
         <button class="dark-toggle" onclick="toggleDarkMode()">
             <span>🌙 Dark Mode</span>
         </button>
-        </div>
+    </div>
 
     <div class="container" id="mainCalculatorContainer">
-        
         <section id="forexCalculator">
             <div class="input-group">
                 <label for="forexAccountSize">Account Size</label>
                 <input type="number" id="forexAccountSize" min="0.01" step="0.01">
             </div>
             <div class="input-group">
-                <label for="forexRiskPercent">Risk  (%)</label>
+                <label for="forexRiskPercent">Risk (%)</label>
                 <input type="number" id="forexRiskPercent" min="0.01" step="0.01">
             </div>
             <div class="input-group">
-                <label for="currencyPair"> Pair</label>
+                <label for="currencyPair">Pair</label>
                 <select id="currencyPair">
-                    <option value="EURUSD">EURUSD</option>
-                    <option value="GBPUSD">GBPUSD</option>
-                    <option value="USDCHF">USDCHF</option>
+                    <optgroup label="Major Pairs">
+                        <option value="AUDUSD">AUDUSD</option>
+                        <option value="EURUSD">EURUSD</option>
+                        <option value="GBPUSD">GBPUSD</option>
+                        <option value="NZDUSD">NZDUSD</option>
+                        <option value="USDCAD">USDCAD</option>
+                        <option value="USDCHF">USDCHF</option>
+                        <option value="USDJPY">USDJPY</option>
+                    </optgroup>
+                    <optgroup label="Cross Pairs">
+                        <option value="AUDCAD">AUDCAD</option>
+                        <option value="AUDCHF">AUDCHF</option>
+                        <option value="AUDJPY">AUDJPY</option>
+                        <option value="AUDNZD">AUDNZD</option>
+                        <option value="CADCHF">CADCHF</option>
+                        <option value="CADJPY">CADJPY</option>
+                        <option value="CHFJPY">CHFJPY</option>
+                        <option value="EURAUD">EURAUD</option>
+                        <option value="EURCAD">EURCAD</option>
+                        <option value="EURCHF">EURCHF</option>
+                        <option value="EURGBP">EURGBP</option>
+                        <option value="EURJPY">EURJPY</option>
+                        <option value="EURNOK">EURNOK</option>
+                        <option value="EURNZD">EURNZD</option>
+                        <option value="EURPLN">EURPLN</option>
+                        <option value="EURSEK">EURSEK</option>
+                        <option value="EURTRY">EURTRY</option>
+                        <option value="GBPAUD">GBPAUD</option>
+                        <option value="GBPCAD">GBPCAD</option>
+                        <option value="GBPCHF">GBPCHF</option>
+                        <option value="GBPJPY">GBPJPY</option>
+                        <option value="GBPNZD">GBPNZD</option>
+                        <option value="NZDCAD">NZDCAD</option>
+                        <option value="NZDCHF">NZDCHF</option>
+                        <option value="NZDJPY">NZDJPY</option>
+                        <option value="USDDKK">USDDKK</option>
+                        <option value="USDHKD">USDHKD</option>
+                        <option value="USDMXN">USDMXN</option>
+                        <option value="USDNOK">USDNOK</option>
+                        <option value="USDPLN">USDPLN</option> 
+                        <option value="USDSEK">USDSEK</option>
+                        <option value="USDSGD">USDSGD</option>
+                        <option value="USDTRY">USDTRY</option>
+                        <option value="USDZAR">USDZAR</option>
+                    </optgroup>
                 </select>
             </div>
             <div class="input-group">
-                <label for="forexEntryPrice">Entry </label>
+                <label for="forexEntryPrice">Entry</label>
                 <input type="number" id="forexEntryPrice" min="0.00000001" step="0.00000001">
             </div>
             <div class="input-group">
@@ -610,18 +631,16 @@ body:not(.dark) .dark-toggle:hover {
                 <input type="number" id="forexTpPips" min="0.1" step="0.1">
             </div>
             <div class="button-group">
-                <button class="long" onclick="calculateForex('long')"> Long</button>
-                <button class="short" onclick="calculateForex('short')"> Short</button>
+                <button class="long" onclick="calculateForex('long')">Long</button>
+                <button class="short" onclick="calculateForex('short')">Short</button>
             </div>
         </section>
         <div id="output" class="result" style="display: none;">
-            </div>
+        </div>
     </div>
     
     <script>
         // --- Global State ---
-        // Removed currentCalculator as only forex is left
-        // Removed currentLanguage as only English is left
 
         // --- Utility Functions ---
         function getRandomInRange(min, max, decimals = 2) {
@@ -634,12 +653,12 @@ body:not(.dark) .dark-toggle:hover {
             navigator.clipboard.writeText(value).then(() => {
                 const iconElement = event.currentTarget;
                 const originalInnerHTML = iconElement.innerHTML;
-                const originalFill = iconElement.style.fill; // Store original fill
+                const originalFill = iconElement.style.fill;
                 iconElement.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="18px" height="18px"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>';
-                iconElement.style.fill = '#28a745'; // Green for success
+                iconElement.style.fill = '#28a745';
                 setTimeout(() => {
                     iconElement.innerHTML = originalInnerHTML;
-                    iconElement.style.fill = originalFill; // Revert to original fill
+                    iconElement.style.fill = originalFill;
                 }, 1500);
             }).catch(err => {
                 console.error('Failed to copy: ', err);
@@ -649,7 +668,7 @@ body:not(.dark) .dark-toggle:hover {
         // --- Dark Mode Toggle ---
         function toggleDarkMode() {
             document.body.classList.toggle("dark");
-            updateDarkModeButtonText(); // Only update dark mode button text
+            updateDarkModeButtonText();
         }
 
         function updateDarkModeButtonText() {
@@ -657,10 +676,10 @@ body:not(.dark) .dark-toggle:hover {
             const darkModeButtonSvg = document.querySelector('.dark-toggle svg');
             if (document.body.classList.contains('dark')) {
                 darkModeButton.textContent = '☀️ Light Mode';
-                if (darkModeButtonSvg) darkModeButtonSvg.style.fill = 'var(--text-color)'; // Adjust SVG color for dark mode
+                if (darkModeButtonSvg) darkModeButtonSvg.style.fill = 'var(--text-color)';
             } else {
                 darkModeButton.textContent = '🌙 Dark Mode';
-                if (darkModeButtonSvg) darkModeButtonSvg.style.fill = 'white'; // Adjust SVG color for light mode
+                if (darkModeButtonSvg) darkModeButtonSvg.style.fill = 'white';
             }
         }
 
@@ -670,12 +689,13 @@ body:not(.dark) .dark-toggle:hover {
 
             let accountSize = parseFloat(document.getElementById('forexAccountSize').value);
             let riskPercent = parseFloat(document.getElementById('forexRiskPercent').value);
-            let currencyPair = document.getElementById('currencyPair').value; /* Corrected ID from 'Pair' to 'currencyPair' */
+            let currencyPair = document.getElementById('currencyPair').value;
             let entryPrice = parseFloat(document.getElementById('forexEntryPrice').value);
             let stopLossPips = parseFloat(document.getElementById('forexStopPips').value);
             let takeProfitPips = parseFloat(document.getElementById('forexTpPips').value);
             const leverageUsed = 100;
 
+            // Default values if inputs are invalid
             if (isNaN(accountSize) || accountSize <= 0) {
                 accountSize = getRandomInRange(1000, 10000, 2);
                 document.getElementById('forexAccountSize').value = accountSize;
@@ -685,13 +705,24 @@ body:not(.dark) .dark-toggle:hover {
                 document.getElementById('forexRiskPercent').value = riskPercent;
             }
             if (isNaN(entryPrice) || entryPrice <= 0) {
-                if (currencyPair === 'EURUSD') {
-                    entryPrice = getRandomInRange(1.05, 1.15, 5);
-                } else if (currencyPair === 'GBPUSD') {
-                    entryPrice = getRandomInRange(1.20, 1.30, 5);
-                } else if (currencyPair === 'USDCHF') {
-                    entryPrice = getRandomInRange(0.88, 0.95, 5);
-                }
+                const priceRanges = {
+                    'EURUSD': [1.05, 1.15, 5], 'GBPUSD': [1.20, 1.30, 5], 'USDCHF': [0.88, 0.95, 5],
+                    'USDJPY': [130, 150, 3], 'USDCAD': [1.30, 1.40, 5], 'AUDUSD': [0.65, 0.75, 5],
+                    'NZDUSD': [0.60, 0.70, 5], 'EURGBP': [0.85, 0.90, 5], 'EURJPY': [140, 160, 3],
+                    'EURCHF': [0.95, 1.05, 5], 'EURAUD': [1.50, 1.65, 5], 'EURCAD': [1.40, 1.55, 5],
+                    'EURNZD': [1.65, 1.80, 5], 'GBPJPY': [160, 180, 3], 'GBPCHF': [1.10, 1.20, 5],
+                    'GBPAUD': [1.75, 1.90, 5], 'GBPCAD': [1.65, 1.80, 5], 'GBPNZD': [1.90, 2.10, 5],
+                    'AUDJPY': [90, 100, 3], 'AUDCHF': [0.60, 0.70, 5], 'AUDCAD': [0.90, 1.00, 5],
+                    'AUDNZD': [1.05, 1.15, 5], 'NZDJPY': [80, 90, 3], 'NZDCHF': [0.55, 0.65, 5],
+                    'NZDCAD': [0.80, 0.90, 5], 'CADJPY': [95, 110, 3], 'CADCHF': [0.70, 0.80, 5],
+                    'CHFJPY': [140, 160, 3], 'EURSEK': [10.50, 11.50, 4], 'EURNOK': [10.50, 11.50, 4],
+                    'USDSEK': [10.00, 11.00, 4], 'USDNOK': [10.00, 11.00, 4], 'USDMXN': [18.00, 20.00, 4],
+                    'USDZAR': [17.00, 19.00, 4], 'USDSGD': [1.30, 1.40, 5], 'USDHKD': [7.80, 7.90, 5],
+                    'EURPLN': [4.50, 4.80, 4], 'USDPLN': [4.00, 4.30, 4], 'EURTRY': [30.00, 35.00, 4],
+                    'USDTRY': [28.00, 32.00, 4], 'USDDKK': [6.80, 7.20, 4]
+                };
+                const [min, max, decimals] = priceRanges[currencyPair] || [1, 2, 5];
+                entryPrice = getRandomInRange(min, max, decimals);
                 document.getElementById('forexEntryPrice').value = entryPrice;
             }
             if (isNaN(stopLossPips) || stopLossPips <= 0) {
@@ -703,24 +734,55 @@ body:not(.dark) .dark-toggle:hover {
                 document.getElementById('forexTpPips').value = takeProfitPips;
             }
 
+            // Pip value calculation
             let pipValueInUSD;
-            if (currencyPair === 'EURUSD' || currencyPair === 'GBPUSD') {
-                pipValueInUSD = 10;
-            } else if (currencyPair === 'USDCHF') {
-                pipValueInUSD = 10 / entryPrice;
-            } else {
-                document.getElementById("output").innerHTML = `<p style="color: #e05e5e;">Invalid currency pair selected.</p>`;
-                return;
+            let pipFactor = 0.0001; // Standard pip for most pairs
+            let pricePrecision = 5;
+
+            // Adjust pipFactor and pricePrecision for pairs with JPY, SEK, NOK, MXN, ZAR, PLN, TRY
+            if (currencyPair.includes('JPY')) {
+                pipFactor = 0.01;
+                pricePrecision = 3;
+            } else if (['EURSEK', 'EURNOK', 'USDSEK', 'USDNOK', 'USDMXN', 'USDZAR', 'EURPLN', 'USDPLN', 'EURTRY', 'USDTRY', 'USDDKK'].includes(currencyPair)) {
+                pipFactor = 0.0001;
+                pricePrecision = 4;
+            } else if (currencyPair === 'USDHKD') {
+                pipFactor = 0.0001;
+                pricePrecision = 5;
             }
-            
-            const pricePrecision = 5;
-            const pipFactor = 0.0001;
+
+            // Pip value calculation based on quote currency
+            const quoteCurrency = currencyPair.substring(3);
+            const baseCurrency = currencyPair.substring(0, 3);
+
+            // Standard lot size is 100,000 units of base currency
+            const lotSize = 100000;
+
+            if (quoteCurrency === 'USD') {
+                // For pairs like EURUSD, GBPUSD, AUDUSD, NZDUSD
+                pipValueInUSD = lotSize * pipFactor;
+            } else if (baseCurrency === 'USD') {
+                // For pairs like USDJPY, USDCAD, USDCHF, etc.
+                pipValueInUSD = (lotSize * pipFactor) / entryPrice;
+            } else {
+                // For cross pairs like EURJPY, GBPCHF, etc.
+                // We need the USD/quote currency rate to convert to USD
+                // Using approximate conversion rates for simplicity
+                const usdQuoteRates = {
+                    'JPY': 150, 'CHF': 0.90, 'CAD': 1.35, 'AUD': 0.70, 'NZD': 0.65,
+                    'GBP': 1.25, 'EUR': 1.10, 'SEK': 10.50, 'NOK': 10.50, 'MXN': 19.00,
+                    'ZAR': 18.00, 'SGD': 1.35, 'HKD': 7.85, 'PLN': 4.10, 'TRY': 30.00, 'DKK': 7.00
+                };
+                const usdQuoteRate = usdQuoteRates[quoteCurrency] || 1;
+                pipValueInUSD = (lotSize * pipFactor) / usdQuoteRate;
+            }
 
             const riskAmount = accountSize * (riskPercent / 100);
             
             const stopLossPrice = (tradeType === 'long') ? entryPrice - (stopLossPips * pipFactor) : entryPrice + (stopLossPips * pipFactor);
             const takeProfitPrice = (tradeType === 'long') ? entryPrice + (takeProfitPips * pipFactor) : entryPrice - (takeProfitPips * pipFactor);
 
+            // Validation for Long and Short positions
             if (tradeType === 'long') {
                 if (stopLossPrice >= entryPrice) {
                     document.getElementById("output").innerHTML = `<p style="color: #e05e5e;">For a **Long** position, Stop Loss Pips must move the price **lower** than the Entry Price.</p>`;
@@ -742,12 +804,12 @@ body:not(.dark) .dark-toggle:hover {
             }
             
             const positionSizeLots = riskAmount / (stopLossPips * pipValueInUSD);
-            const positionSizeUnits = positionSizeLots * 100000;
+            const positionSizeUnits = positionSizeLots * lotSize;
 
             let potentialProfit;
             let potentialLoss;
 
-         // Potential Loss is always the risk amount
+            // Potential Loss is always the risk amount
             potentialLoss = riskAmount;
 
             // Calculate Potential Profit based on Potential Loss and pip ratio
@@ -755,20 +817,18 @@ body:not(.dark) .dark-toggle:hover {
 
             const riskRewardRatio = (takeProfitPips / stopLossPips).toFixed(2);
 
-
             let outputHtml = '<table>';
             outputHtml += createCopyableTableRow('Position Size (Lot)', `${positionSizeLots.toFixed(2)}`, positionSizeLots.toFixed(2));
-            outputHtml += createCopyableTableRow('Entry Price ', `${entryPrice.toFixed(pricePrecision)} `, entryPrice.toFixed(pricePrecision));
-            outputHtml += createCopyableTableRow('Stop Price ', `${stopLossPrice.toFixed(pricePrecision)} `, stopLossPrice.toFixed(pricePrecision)); // Changed to "Stop Price ($)"
-            outputHtml += createCopyableTableRow('TP Price ', `${takeProfitPrice.toFixed(pricePrecision)} `, takeProfitPrice.toFixed(pricePrecision)); // Changed to "TP Price ($)"
-            outputHtml += `<tr><td>Potential Profit </td><td>${potentialProfit.toFixed(2)} </td></tr>`;
-            outputHtml += `<tr><td>Potential Loss </td><td>${potentialLoss.toFixed(2)} </td></tr>`;
+            outputHtml += createCopyableTableRow('Entry Price', `${entryPrice.toFixed(pricePrecision)}`, entryPrice.toFixed(pricePrecision));
+            outputHtml += createCopyableTableRow('Stop Price', `${stopLossPrice.toFixed(pricePrecision)}`, stopLossPrice.toFixed(pricePrecision));
+            outputHtml += createCopyableTableRow('TP Price', `${takeProfitPrice.toFixed(pricePrecision)}`, takeProfitPrice.toFixed(pricePrecision));
+            outputHtml += `<tr><td>Potential Profit</td><td>${potentialProfit.toFixed(2)}</td></tr>`;
+            outputHtml += `<tr><td>Potential Loss</td><td>${potentialLoss.toFixed(2)}</td></tr>`;
             outputHtml += `<tr><td>Risk:Reward</td><td>1:${riskRewardRatio}</td></tr>`;
             outputHtml += '</table>';
 
             document.getElementById("output").innerHTML = outputHtml;
         }
-
 
         function createCopyableTableRow(label, displayValue, valueToCopy) {
             return `<tr><td>${label}</td><td>${displayValue} <span class="copy-icon" onclick="copyValue(event, '${valueToCopy}')"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="18px" height="18px"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg></span></td></tr>`;
@@ -779,9 +839,7 @@ body:not(.dark) .dark-toggle:hover {
             if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
                 document.body.classList.add('dark');
             }
-            updateDarkModeButtonText(); // Set initial text content for dark mode button
-
-            // Removed language dropdown toggle and selection event listeners
+            updateDarkModeButtonText();
         });
         
         window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
@@ -792,7 +850,6 @@ body:not(.dark) .dark-toggle:hover {
             }
             updateDarkModeButtonText();
         });
-
     </script>
 </body>
 </html>
