@@ -141,6 +141,119 @@ input[type="text"] {
     box-shadow: inset 0 1px 3px rgba(0,0,0,0.06);
 }
 
+/* --- START: MODERN PAIRS DROPDOWN STYLES --- */
+.custom-select-wrapper {
+    position: relative;
+    width: 100%;
+    font-weight: 500;
+}
+
+.custom-select {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 14px 18px;
+    font-size: 18.5px;
+    border-radius: 12px;
+    border: 1.5px solid #dcdcdc;
+    background: var(--input-bg);
+    color: var(--text-color);
+    cursor: pointer;
+    transition: background 0.4s, color 0.4s, border-color 0.4s, box-shadow 0.4s;
+    box-sizing: border-box;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.06);
+    user-select: none;
+}
+
+.custom-select-trigger {
+    flex-grow: 1;
+    text-align: left;
+}
+
+.custom-select-arrow {
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 6px solid var(--text-color);
+    transition: transform 0.3s ease;
+    margin-left: 15px;
+}
+
+.custom-select-options {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    right: 0;
+    background: var(--dropdown-bg);
+    border: 1px solid var(--history-border);
+    border-radius: 12px;
+    list-style: none;
+    padding: 8px 0;
+    margin: 0;
+    z-index: 100;
+    max-height: 250px;
+    overflow-y: auto;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
+}
+
+.custom-select-wrapper.open .custom-select-options {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.custom-select-wrapper.open .custom-select-arrow {
+    transform: rotate(180deg);
+}
+
+.custom-select-wrapper.open .custom-select {
+    border-color: #5cb8e0;
+    box-shadow: 0 0 12px rgba(92, 184, 224, 0.6);
+}
+
+body.dark .custom-select-wrapper.open .custom-select {
+    border-color: #7ab3e0;
+    box-shadow: 0 0 12px rgba(122, 179, 224, 0.5);
+}
+
+.custom-select-options li {
+    padding: 12px 20px;
+    color: var(--dropdown-text-color);
+    cursor: pointer;
+    transition: background-color 0.2s;
+    text-align: left;
+}
+
+.custom-select-options li:hover {
+    background-color: var(--dropdown-hover-bg);
+}
+
+.custom-select-options li.selected {
+    background-color: var(--hover-bg);
+    font-weight: 600;
+}
+
+/* Dark mode specific styles for custom dropdown */
+body.dark .custom-select {
+    border-color: #4a618f;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.15);
+    color: white;
+}
+
+body.dark .custom-select-arrow {
+    border-top-color: #fdd835;
+}
+
+/* --- END: MODERN PAIRS DROPDOWN STYLES --- */
+
+/* Original select styles (now mostly redundant but kept for fallback) */
 select {
     width: 100%;
     padding: 14px 18px;
@@ -158,6 +271,15 @@ select {
     text-align: left;
     box-shadow: inset 0 1px 3px rgba(0,0,0,0.06);
     padding-left: 18px;
+    cursor: pointer; 
+    background-image: url('data:image/svg+xml;utf8,<svg fill="%23424242" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right 15px center;
+    background-size: 18px;
+}
+
+body.dark select {
+    background-image: url('data:image/svg+xml;utf8,<svg fill="%23e3f2fd" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
 }
 
 body.dark input[type="number"],
@@ -305,7 +427,7 @@ th {
 
 table tr:last-child td:first-child {
     border-bottom-right-radius: 0;
-    border-bottom-left-radius:  Впервые в истории: 14px;
+    border-bottom-left-radius: 14px;
 }
 
 table tr:last-child td:last-child {
@@ -334,7 +456,7 @@ tr:hover td {
     font-size: 22px;
     font-weight: 500;
     border-radius: 16px;
-    box Greenwich Mean Time-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     background: var(--toggle-button-bg);
     color: white;
     transition: all 0.3s ease;
@@ -430,6 +552,12 @@ body:not(.dark) .dark-toggle:hover {
         border-radius: 10px;
         padding-left: 16px;
     }
+    
+    .custom-select {
+        padding: 12px 16px;
+        font-size: 16px;
+        border-radius: 10px;
+    }
 
     .button-group {
         flex-direction: column;
@@ -521,33 +649,40 @@ body:not(.dark) .dark-toggle:hover {
         padding-left: 12px;
     }
 
+    .custom-select {
+        padding: 10px 12px;
+        font-size: 14px;
+        border-radius: 8px;
+    }
+
+
     .button-group {
-        button-group {
-    gap: 10px;
-}
+        gap: 10px;
+    }
 
-button {
-    padding: 10px 15px;
-    font-size: 16px;
-    border-radius: 8px;
-}
+    button {
+        padding: 10px 15px;
+        font-size: 16px;
+        border-radius: 8px;
+    }
 
-.result {
-    padding: 15px 20px;
-    font-size: 16px;
-    border-radius: 10px;
-    margin-top: 20px;
-    min-height: 180px;
-}
+    .result {
+        padding: 15px 20px;
+        font-size: 16px;
+        border-radius: 10px;
+        margin-top: 20px;
+        min-height: 180px;
+    }
 
-table {
-    font-size: 16px;
-    border-spacing: 0 6px;
-}
+    table {
+        font-size: 16px;
+        border-spacing: 0 6px;
+    }
 
-th, td {
-    padding: 10px 12px;
-    border-radius: 10px;
+    th, td {
+        padding: 10px 12px;
+        border-radius: 10px;
+    }
 }
 </style>
 </head>
@@ -561,62 +696,30 @@ th, td {
     <div class="container" id="mainCalculatorContainer">
         <section id="forexCalculator">
             <div class="input-group">
+                <label for="currencyPair">Pair</label>
+                <div class="custom-select-wrapper">
+                    <select id="currencyPair" style="display: none;">
+                        
+                        <option value="EURUSD" selected>EURUSD</option> <option value="GBPUSD">GBPUSD</option>
+                        <option value="NZDUSD">NZDUSD</option>
+                        <option value="USDCAD">USDCAD</option>
+                        
+                        <option value="USDJPY">USDJPY</option>
+                    </select>
+                    <div class="custom-select" tabindex="0">
+                        <span class="custom-select-trigger"></span>
+                        <div class="custom-select-arrow"></div>
+                    </div>
+                    <ul class="custom-select-options"></ul>
+                </div>
+                </div>
+            <div class="input-group">
                 <label for="forexAccountSize">Account Size</label>
                 <input type="number" id="forexAccountSize" min="0.01" step="0.01">
             </div>
             <div class="input-group">
                 <label for="forexRiskPercent">Risk (%)</label>
                 <input type="number" id="forexRiskPercent" min="0.01" step="0.01">
-            </div>
-            <div class="input-group">
-                <label for="currencyPair">Pair</label>
-                <select id="currencyPair">
-                    <optgroup label="Major Pairs">
-                        <option value="AUDUSD">AUDUSD</option>
-                        <option value="EURUSD">EURUSD</option>
-                        <option value="GBPUSD">GBPUSD</option>
-                        <option value="NZDUSD">NZDUSD</option>
-                        <option value="USDCAD">USDCAD</option>
-                        <option value="USDCHF">USDCHF</option>
-                        <option value="USDJPY">USDJPY</option>
-                    </optgroup>
-                    <optgroup label="Cross Pairs">
-                        <option value="AUDCAD">AUDCAD</option>
-                        <option value="AUDCHF">AUDCHF</option>
-                        <option value="AUDJPY">AUDJPY</option>
-                        <option value="AUDNZD">AUDNZD</option>
-                        <option value="CADCHF">CADCHF</option>
-                        <option value="CADJPY">CADJPY</option>
-                        <option value="CHFJPY">CHFJPY</option>
-                        <option value="EURAUD">EURAUD</option>
-                        <option value="EURCAD">EURCAD</option>
-                        <option value="EURCHF">EURCHF</option>
-                        <option value="EURGBP">EURGBP</option>
-                        <option value="EURJPY">EURJPY</option>
-                        <option value="EURNOK">EURNOK</option>
-                        <option value="EURNZD">EURNZD</option>
-                        <option value="EURPLN">EURPLN</option>
-                        <option value="EURSEK">EURSEK</option>
-                        <option value="EURTRY">EURTRY</option>
-                        <option value="GBPAUD">GBPAUD</option>
-                        <option value="GBPCAD">GBPCAD</option>
-                        <option value="GBPCHF">GBPCHF</option>
-                        <option value="GBPJPY">GBPJPY</option>
-                        <option value="GBPNZD">GBPNZD</option>
-                        <option value="NZDCAD">NZDCAD</option>
-                        <option value="NZDCHF">NZDCHF</option>
-                        <option value="NZDJPY">NZDJPY</option>
-                        <option value="USDDKK">USDDKK</option>
-                        <option value="USDHKD">USDHKD</option>
-                        <option value="USDMXN">USDMXN</option>
-                        <option value="USDNOK">USDNOK</option>
-                        <option value="USDPLN">USDPLN</option> 
-                        <option value="USDSEK">USDSEK</option>
-                        <option value="USDSGD">USDSGD</option>
-                        <option value="USDTRY">USDTRY</option>
-                        <option value="USDZAR">USDZAR</option>
-                    </optgroup>
-                </select>
             </div>
             <div class="input-group">
                 <label for="forexEntryPrice">Entry</label>
@@ -693,7 +796,7 @@ th, td {
             let entryPrice = parseFloat(document.getElementById('forexEntryPrice').value);
             let stopLossPips = parseFloat(document.getElementById('forexStopPips').value);
             let takeProfitPips = parseFloat(document.getElementById('forexTpPips').value);
-            const leverageUsed = 100;
+            const leverageUsed = 100; // This value is not used in the final calculation, but kept for context
 
             // Default values if inputs are invalid
             if (isNaN(accountSize) || accountSize <= 0) {
@@ -708,18 +811,7 @@ th, td {
                 const priceRanges = {
                     'EURUSD': [1.05, 1.15, 5], 'GBPUSD': [1.20, 1.30, 5], 'USDCHF': [0.88, 0.95, 5],
                     'USDJPY': [130, 150, 3], 'USDCAD': [1.30, 1.40, 5], 'AUDUSD': [0.65, 0.75, 5],
-                    'NZDUSD': [0.60, 0.70, 5], 'EURGBP': [0.85, 0.90, 5], 'EURJPY': [140, 160, 3],
-                    'EURCHF': [0.95, 1.05, 5], 'EURAUD': [1.50, 1.65, 5], 'EURCAD': [1.40, 1.55, 5],
-                    'EURNZD': [1.65, 1.80, 5], 'GBPJPY': [160, 180, 3], 'GBPCHF': [1.10, 1.20, 5],
-                    'GBPAUD': [1.75, 1.90, 5], 'GBPCAD': [1.65, 1.80, 5], 'GBPNZD': [1.90, 2.10, 5],
-                    'AUDJPY': [90, 100, 3], 'AUDCHF': [0.60, 0.70, 5], 'AUDCAD': [0.90, 1.00, 5],
-                    'AUDNZD': [1.05, 1.15, 5], 'NZDJPY': [80, 90, 3], 'NZDCHF': [0.55, 0.65, 5],
-                    'NZDCAD': [0.80, 0.90, 5], 'CADJPY': [95, 110, 3], 'CADCHF': [0.70, 0.80, 5],
-                    'CHFJPY': [140, 160, 3], 'EURSEK': [10.50, 11.50, 4], 'EURNOK': [10.50, 11.50, 4],
-                    'USDSEK': [10.00, 11.00, 4], 'USDNOK': [10.00, 11.00, 4], 'USDMXN': [18.00, 20.00, 4],
-                    'USDZAR': [17.00, 19.00, 4], 'USDSGD': [1.30, 1.40, 5], 'USDHKD': [7.80, 7.90, 5],
-                    'EURPLN': [4.50, 4.80, 4], 'USDPLN': [4.00, 4.30, 4], 'EURTRY': [30.00, 35.00, 4],
-                    'USDTRY': [28.00, 32.00, 4], 'USDDKK': [6.80, 7.20, 4]
+                    'NZDUSD': [0.60, 0.70, 5]
                 };
                 const [min, max, decimals] = priceRanges[currencyPair] || [1, 2, 5];
                 entryPrice = getRandomInRange(min, max, decimals);
@@ -734,29 +826,21 @@ th, td {
                 document.getElementById('forexTpPips').value = takeProfitPips;
             }
 
-            // Pip value calculation
             let pipValueInUSD;
-            let pipFactor = 0.0001; // Standard pip for most pairs
-            let pricePrecision = 5;
+            let pipFactor;
+            let pricePrecision;
+            let lotSize = 100000; // Standard lot size is 100,000 units of base currency
 
-            // Adjust pipFactor and pricePrecision for pairs with JPY, SEK, NOK, MXN, ZAR, PLN, TRY
+            pipFactor = 0.0001; // Standard pip for most pairs
+            pricePrecision = 5; // Default precision for most pairs
+
             if (currencyPair.includes('JPY')) {
                 pipFactor = 0.01;
                 pricePrecision = 3;
-            } else if (['EURSEK', 'EURNOK', 'USDSEK', 'USDNOK', 'USDMXN', 'USDZAR', 'EURPLN', 'USDPLN', 'EURTRY', 'USDTRY', 'USDDKK'].includes(currencyPair)) {
-                pipFactor = 0.0001;
-                pricePrecision = 4;
-            } else if (currencyPair === 'USDHKD') {
-                pipFactor = 0.0001;
-                pricePrecision = 5;
             }
 
-            // Pip value calculation based on quote currency
             const quoteCurrency = currencyPair.substring(3);
             const baseCurrency = currencyPair.substring(0, 3);
-
-            // Standard lot size is 100,000 units of base currency
-            const lotSize = 100000;
 
             if (quoteCurrency === 'USD') {
                 // For pairs like EURUSD, GBPUSD, AUDUSD, NZDUSD
@@ -764,23 +848,16 @@ th, td {
             } else if (baseCurrency === 'USD') {
                 // For pairs like USDJPY, USDCAD, USDCHF, etc.
                 pipValueInUSD = (lotSize * pipFactor) / entryPrice;
-            } else {
-                // For cross pairs like EURJPY, GBPCHF, etc.
-                // We need the USD/quote currency rate to convert to USD
-                // Using approximate conversion rates for simplicity
-                const usdQuoteRates = {
-                    'JPY': 150, 'CHF': 0.90, 'CAD': 1.35, 'AUD': 0.70, 'NZD': 0.65,
-                    'GBP': 1.25, 'EUR': 1.10, 'SEK': 10.50, 'NOK': 10.50, 'MXN': 19.00,
-                    'ZAR': 18.00, 'SGD': 1.35, 'HKD': 7.85, 'PLN': 4.10, 'TRY': 30.00, 'DKK': 7.00
-                };
-                const usdQuoteRate = usdQuoteRates[quoteCurrency] || 1;
-                pipValueInUSD = (lotSize * pipFactor) / usdQuoteRate;
             }
-
+            
             const riskAmount = accountSize * (riskPercent / 100);
             
-            const stopLossPrice = (tradeType === 'long') ? entryPrice - (stopLossPips * pipFactor) : entryPrice + (stopLossPips * pipFactor);
-            const takeProfitPrice = (tradeType === 'long') ? entryPrice + (takeProfitPips * pipFactor) : entryPrice - (takeProfitPips * pipFactor);
+            let stopLossPrice;
+            let takeProfitPrice;
+
+            stopLossPrice = (tradeType === 'long') ? entryPrice - (stopLossPips * pipFactor) : entryPrice + (stopLossPips * pipFactor);
+            takeProfitPrice = (tradeType === 'long') ? entryPrice + (takeProfitPips * pipFactor) : entryPrice - (takeProfitPips * pipFactor);
+            
 
             // Validation for Long and Short positions
             if (tradeType === 'long') {
@@ -804,7 +881,7 @@ th, td {
             }
             
             const positionSizeLots = riskAmount / (stopLossPips * pipValueInUSD);
-            const positionSizeUnits = positionSizeLots * lotSize;
+            // const positionSizeUnits = positionSizeLots * lotSize; // This variable is calculated but not used
 
             let potentialProfit;
             let potentialLoss;
@@ -818,13 +895,13 @@ th, td {
             const riskRewardRatio = (takeProfitPips / stopLossPips).toFixed(2);
 
             let outputHtml = '<table>';
-            outputHtml += createCopyableTableRow('Position Size (Lot)', `${positionSizeLots.toFixed(2)}`, positionSizeLots.toFixed(2));
-            outputHtml += createCopyableTableRow('Entry Price', `${entryPrice.toFixed(pricePrecision)}`, entryPrice.toFixed(pricePrecision));
-            outputHtml += createCopyableTableRow('Stop Price', `${stopLossPrice.toFixed(pricePrecision)}`, stopLossPrice.toFixed(pricePrecision));
-            outputHtml += createCopyableTableRow('TP Price', `${takeProfitPrice.toFixed(pricePrecision)}`, takeProfitPrice.toFixed(pricePrecision));
-            outputHtml += `<tr><td>Potential Profit</td><td>${potentialProfit.toFixed(2)}</td></tr>`;
-            outputHtml += `<tr><td>Potential Loss</td><td>${potentialLoss.toFixed(2)}</td></tr>`;
-            outputHtml += `<tr><td>Risk:Reward</td><td>1:${riskRewardRatio}</td></tr>`;
+            outputHtml += createCopyableTableRow(' Volume(Lot)', `${positionSizeLots.toFixed(2)}`, positionSizeLots.toFixed(2));
+
+            outputHtml += createCopyableTableRow('SL ', `${stopLossPrice.toFixed(pricePrecision)}`, stopLossPrice.toFixed(pricePrecision));
+            outputHtml += createCopyableTableRow('TP ', `${takeProfitPrice.toFixed(pricePrecision)}`, takeProfitPrice.toFixed(pricePrecision));
+            outputHtml += `<tr><td> Profit</td><td>${potentialProfit.toFixed(2)}</td></tr>`;
+            outputHtml += `<tr><td> Loss</td><td>${potentialLoss.toFixed(2)}</td></tr>`;
+            outputHtml += `<tr><td>Risk : Reward</td><td>1:${riskRewardRatio}</td></tr>`;
             outputHtml += '</table>';
 
             document.getElementById("output").innerHTML = outputHtml;
@@ -840,6 +917,60 @@ th, td {
                 document.body.classList.add('dark');
             }
             updateDarkModeButtonText();
+
+            // --- START: CUSTOM SELECT LOGIC ---
+            const selectWrapper = document.querySelector('.custom-select-wrapper');
+            if(selectWrapper) {
+                const nativeSelect = selectWrapper.querySelector('select');
+                const customSelect = selectWrapper.querySelector('.custom-select');
+                const customSelectTrigger = customSelect.querySelector('.custom-select-trigger');
+                const customOptions = selectWrapper.querySelector('.custom-select-options');
+
+                // Create custom options from the native select
+                Array.from(nativeSelect.options).forEach(option => {
+                    const li = document.createElement('li');
+                    li.textContent = option.textContent;
+                    li.setAttribute('data-value', option.value);
+                    if (option.selected) {
+                        li.classList.add('selected');
+                        customSelectTrigger.textContent = option.textContent;
+                    }
+                    customOptions.appendChild(li);
+                });
+
+                // Toggle dropdown on click
+                customSelect.addEventListener('click', () => {
+                    selectWrapper.classList.toggle('open');
+                });
+
+                // Handle option selection
+                customOptions.addEventListener('click', (e) => {
+                    if (e.target.tagName === 'LI') {
+                        const value = e.target.getAttribute('data-value');
+                        const text = e.target.textContent;
+
+                        // Update native select (important for calculations)
+                        nativeSelect.value = value;
+                        
+                        // Update custom select UI
+                        customSelectTrigger.textContent = text;
+                        selectWrapper.classList.remove('open');
+                        
+                        // Update selected class
+                        customOptions.querySelector('.selected')?.classList.remove('selected');
+                        e.target.classList.add('selected');
+                    }
+                });
+
+                // Close dropdown when clicking outside
+                window.addEventListener('click', (e) => {
+                    if (!selectWrapper.contains(e.target)) {
+                        selectWrapper.classList.remove('open');
+                    }
+                });
+            }
+             // --- END: CUSTOM SELECT LOGIC ---
+
         });
         
         window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
