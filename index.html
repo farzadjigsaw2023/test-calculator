@@ -639,10 +639,6 @@
                 <input type="number" id="forexRiskPercent" min="0.01" step="0.01">
             </div>
             <div class="input-group">
-                <label for="forexSpread" id="spreadLabel">Spread</label>
-                <input type="number" id="forexSpread" min="0" step="0.1">
-            </div>
-            <div class="input-group">
                 <label for="forexEntryPrice">Entry Price</label>
                 <input type="number" id="forexEntryPrice" min="0.00000001" step="0.00000001">
             </div>
@@ -709,7 +705,6 @@
             let riskPercent = parseFloat(document.getElementById('forexRiskPercent').value);
             let currencyPair = document.getElementById('currencyPair').value;
             let entryPrice = parseFloat(document.getElementById('forexEntryPrice').value);
-            let spread = parseFloat(document.getElementById('forexSpread').value);
             let inputStopLossValue = parseFloat(document.getElementById('forexStopPips').value);
             let inputTakeProfitValue = parseFloat(document.getElementById('forexTpPips').value);
 
@@ -721,14 +716,6 @@
             if (isNaN(riskPercent) || riskPercent <= 0) {
                 riskPercent = getRandomInRange(0.1, 2, 2);
                 document.getElementById('forexRiskPercent').value = riskPercent;
-            }
-             if (isNaN(spread) || spread < 0) { // Spread can be 0
-                if (currencyPair === 'XAUUSD' || currencyPair === 'US30') {
-                    spread = getRandomInRange(0.5, 2, 2); // Random dollar amount
-                } else {
-                    spread = getRandomInRange(0.5, 3, 1); // Random pips
-                }
-                document.getElementById('forexSpread').value = spread;
             }
             if (isNaN(entryPrice) || entryPrice <= 0) {
                 const priceRanges = {
@@ -833,14 +820,14 @@
                     return;
                 }
             }
-
-            // *** CORE LOGIC CHANGE: Incorporate spread into risk calculation ***
-            const effectiveStopLossDistance = inputStopLossValue + spread;
+            
+            // *** CORE LOGIC CHANGE: Spread removed from calculation ***
+            const effectiveStopLossDistance = inputStopLossValue;
 
             const totalDollarRiskPerLotAtSL = effectiveStopLossDistance * valuePerPipOrPointPerLot;
 
             if (totalDollarRiskPerLotAtSL === 0) {
-                document.getElementById("output").innerHTML = `<p style="color: #e05e5e;">Stop Loss value (including spread) cannot be zero.</p>`;
+                document.getElementById("output").innerHTML = `<p style="color: #e05e5e;">Stop Loss value cannot be zero.</p>`;
                 return;
             }
 
@@ -905,7 +892,7 @@
                         selectWrapper.classList.remove('open');
                         customOptions.querySelector('.selected')?.classList.remove('selected');
                         e.target.classList.add('selected');
-                        updateInputLabels(value); // *** UPDATED FUNCTION CALL ***
+                        updateInputLabels(value);
                     }
                 });
 
@@ -915,7 +902,7 @@
                     }
                 });
 
-                updateInputLabels(nativeSelect.value); // *** UPDATED FUNCTION CALL ***
+                updateInputLabels(nativeSelect.value);
             }
         });
         
@@ -928,20 +915,16 @@
             updateDarkModeButtonText();
         });
 
-        // *** RENAMED AND UPDATED FUNCTION ***
         function updateInputLabels(currencyPair) {
             const stopLossLabel = document.getElementById('stopLossLabel');
             const takeProfitLabel = document.getElementById('takeProfitLabel');
-            const spreadLabel = document.getElementById('spreadLabel');
-
+            
             if (currencyPair === 'XAUUSD') {
                 stopLossLabel.textContent = 'Stop Loss ($)';
                 takeProfitLabel.textContent = 'Take Profit ($)';
-                spreadLabel.textContent = 'Spread ($)';
             } else {
                 stopLossLabel.textContent = 'Stop Loss (Pips)';
                 takeProfitLabel.textContent = 'Take Profit (Pips)';
-                spreadLabel.textContent = 'Spread (Pips)';
             }
         }
     </script>
