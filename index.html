@@ -842,9 +842,9 @@
             outputHtml += createCopyableTableRow(' SL ', `${displayStopLossPrice.toFixed(pricePrecision)}`, displayStopLossPrice.toFixed(pricePrecision));
             outputHtml += createCopyableTableRow(' TP ', `${displayTakeProfitPrice.toFixed(pricePrecision)}`, displayTakeProfitPrice.toFixed(pricePrecision));
             // Modified lines with new class for coloring
-            outputHtml += `<tr class="profit-row"><td> Profit ($)</td><td>${potentialProfit.toFixed(2)}</td></tr>`;
-            outputHtml += `<tr class="loss-row"><td> Loss ($)</td><td>${potentialLoss.toFixed(2)}</td></tr>`;
-            outputHtml += `<tr><td>Risk : Reward</td><td>1:${riskRewardRatio}</td></tr>`;
+            outputHtml += `<tr class="profit-row"><td> Profit ($)</td><td>+${potentialProfit.toFixed(2)}</td></tr>`;
+            outputHtml += `<tr class="loss-row"><td> Loss ($)</td><td>-${potentialLoss.toFixed(2)}</td></tr>`;
+            outputHtml += `<tr><td>Risk : Reward</td><td>1 : ${riskRewardRatio}</td></tr>`;
             outputHtml += '</table>';
 
             document.getElementById("output").innerHTML = outputHtml;
@@ -920,11 +920,11 @@
             const takeProfitLabel = document.getElementById('takeProfitLabel');
             
             if (currencyPair === 'XAUUSD') {
-                stopLossLabel.textContent = 'Stop Loss ($)';
-                takeProfitLabel.textContent = 'Take Profit ($)';
+                stopLossLabel.textContent = 'SL ($)';
+                takeProfitLabel.textContent = 'TP ($)';
             } else {
-                stopLossLabel.textContent = 'Stop Loss (Pips)';
-                takeProfitLabel.textContent = 'Take Profit (Pips)';
+                stopLossLabel.textContent = 'SL (Pips)';
+                takeProfitLabel.textContent = 'TP (Pips)';
             }
         }
     </script>
