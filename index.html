@@ -621,7 +621,7 @@
                     <select id="currencyPair" style="display: none;">
                         <option value="XAUUSD">XAUUSD</option>
                         <option value="EURUSD">EURUSD</option>
-                        <option value="USDJPY">USDJPY</option>
+                        <option value="US30">US30</option>
                     </select>
                     <div class="custom-select" tabindex="0">
                         <span class="custom-select-trigger"></span>
@@ -720,8 +720,9 @@
             if (isNaN(entryPrice) || entryPrice <= 0) {
                 const priceRanges = {
                     'XAUUSD': [2200, 2500, 2],
+                    'US30': [34000, 39000, 0], // Added US30
                     'EURUSD': [1.05, 1.15, 5], 'GBPUSD': [1.20, 1.30, 5], 'USDCHF': [0.88, 0.95, 5],
-                    'USDJPY': [130, 150, 3], 'USDCAD': [1.30, 1.40, 5], 'AUDUSD': [0.65, 0.75, 5],
+                    'USDCAD': [1.30, 1.40, 5], 'AUDUSD': [0.65, 0.75, 5],
                     'NZDUSD': [0.60, 0.70, 5]
                 };
                 const [min, max, decimals] = priceRanges[currencyPair] || [1, 2, 5];
@@ -753,6 +754,7 @@
 
             const pairConfigs = {
                 'XAUUSD': { 'dollarPerPoint': 1, 'unitMultiplier': 100, 'pricePrecision': 2, 'isDollarBasedSLTP': true },
+                'US30': { 'dollarPerPoint': 1, 'unitMultiplier': 1, 'pricePrecision': 0, 'isDollarBasedSLTP': true }, // Added US30
                 'EURUSD': { 'pipSize': 0.0001, 'pricePrecision': 5, 'unitValueInUSD': 1 },
                 'USDCAD': { 'pipSize': 0.0001, 'pricePrecision': 5, 'unitValueInUSD': 1 },
                 'USDJPY': { 'pipSize': 0.01, 'pricePrecision': 3, 'unitValueInUSD': 1 },
@@ -919,7 +921,7 @@
             const stopLossLabel = document.getElementById('stopLossLabel');
             const takeProfitLabel = document.getElementById('takeProfitLabel');
             
-            if (currencyPair === 'XAUUSD') {
+            if (currencyPair === 'XAUUSD' || currencyPair === 'US30') {
                 stopLossLabel.textContent = 'SL ($)';
                 takeProfitLabel.textContent = 'TP ($)';
             } else {
