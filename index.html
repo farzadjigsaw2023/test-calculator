@@ -754,7 +754,7 @@
 
             const pairConfigs = {
                 'XAUUSD': { 'dollarPerPoint': 1, 'unitMultiplier': 100, 'pricePrecision': 2, 'isDollarBasedSLTP': true },
-                'US30': { 'dollarPerPoint': 1, 'unitMultiplier': 1, 'pricePrecision': 0, 'isDollarBasedSLTP': true }, // Added US30
+                'US30': { 'dollarPerPoint': 0.1, 'unitMultiplier': 1, 'pricePrecision': 0, 'isDollarBasedSLTP': true },
                 'EURUSD': { 'pipSize': 0.0001, 'pricePrecision': 5, 'unitValueInUSD': 1 },
                 'USDCAD': { 'pipSize': 0.0001, 'pricePrecision': 5, 'unitValueInUSD': 1 },
                 'USDJPY': { 'pipSize': 0.01, 'pricePrecision': 3, 'unitValueInUSD': 1 },
@@ -806,17 +806,16 @@
 
             let valuePerPipOrPointPerLot; 
 
-            if (config.isDollarBasedSLTP) {
+            if (currencyPair === 'US30') {
+                valuePerPipOrPointPerLot = 1; 
+            } else if (config.isDollarBasedSLTP) {
                 valuePerPipOrPointPerLot = config.unitMultiplier * config.dollarPerPoint;
             } else {
                 const quoteCurrency = currencyPair.substring(3);
-                const baseCurrency = currencyPair.substring(0, 3);
                 const standardLotSize = 100000;
 
                 if (quoteCurrency === 'USD') {
                     valuePerPipOrPointPerLot = standardLotSize * config.pipSize; 
-                } else if (baseCurrency === 'USD') {
-                    valuePerPipOrPointPerLot = (standardLotSize * config.pipSize) / entryPrice;
                 } else {
                     document.getElementById("output").innerHTML = `<p style="color: #e05e5e;">Calculation for cross-currency pair ${currencyPair} is not fully supported.</p>`;
                     return;
