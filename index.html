@@ -31,6 +31,9 @@
         --copy-icon-color: #6c757d;
         --border-color: #dee2e6; /* Light grey border */
         --focus-glow: rgba(0, 123, 255, 0.25); /* Blue glow */
+        
+        --active-currency-bg: linear-gradient(45deg, #007bff, #0056b3);
+        --active-currency-color: white;
     }
 
     /* Dark Mode Overrides */
@@ -57,6 +60,9 @@
         --copy-icon-color: #bbd0e0;
         --border-color: #3f51b5; /* Darker border */
         --focus-glow: rgba(139, 224, 255, 0.35); /* Lighter blue glow */
+        
+        --active-currency-bg: linear-gradient(45deg, #3f51b5, #5c6bc0);
+        --active-currency-color: white;
     }
 
     body {
@@ -151,103 +157,36 @@
         border-color: #8be0ff;
     }
 
-    /* Custom Dropdown Styles */
-    .custom-select-wrapper {
-        position: relative;
-        width: 100%;
-        font-weight: 500;
+    /* New currency selection buttons */
+    .currency-selection {
+        display: flex;
+        gap: 15px;
+        margin-bottom: 20px;
     }
 
-    .custom-select {
-        position: relative;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        width: 100%;
+    .currency-selection button {
+        flex: 1;
         padding: 14px 18px;
         font-size: 16px;
+        font-weight: 600;
         border-radius: 12px;
         border: 1.5px solid var(--border-color);
         background: var(--input-bg);
-        color: var(--text-color);
+        color: var(--label-color);
         cursor: pointer;
         transition: all 0.3s ease;
-        box-sizing: border-box;
-        box-shadow: inset 0 2px 4px rgba(0,0,0,0.04);
-        user-select: none;
     }
 
-    .custom-select-trigger {
-        flex-grow: 1;
-        text-align: left;
-    }
-
-    .custom-select-arrow {
-        width: 0;
-        height: 0;
-        border-left: 6px solid transparent;
-        border-right: 6px solid transparent;
-        border-top: 6px solid var(--text-color);
-        transition: transform 0.3s ease;
-        margin-left: 10px;
-    }
-
-    .custom-select-options {
-        position: absolute;
-        top: calc(100% + 10px);
-        left: 0;
-        right: 0;
-        background: var(--dropdown-bg);
-        border: 1px solid var(--border-color);
-        border-radius: 12px;
-        list-style: none;
-        padding: 8px 0;
-        margin: 0;
-        z-index: 100;
-        max-height: 250px;
-        overflow-y: auto;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.12);
-        opacity: 0;
-        visibility: hidden;
-        transform: translateY(-10px);
-        transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
-    }
-
-    .custom-select-wrapper.open .custom-select-options {
-        opacity: 1;
-        visibility: visible;
-        transform: translateY(0);
-    }
-
-    .custom-select-wrapper.open .custom-select-arrow {
-        transform: rotate(180deg);
-    }
-
-    body.dark .custom-select {
-        border-color: var(--border-color);
-        box-shadow: inset 0 2px 4px rgba(0,0,0,0.08);
-        color: var(--text-color);
-    }
-
-    body.dark .custom-select-arrow {
-        border-top-color: var(--text-color);
-    }
-
-    .custom-select-options li {
-        padding: 12px 18px;
-        color: var(--dropdown-text-color);
-        cursor: pointer;
-        transition: background-color 0.2s ease, color 0.2s ease;
-        text-align: left;
-    }
-
-    .custom-select-options li:hover {
-        background-color: var(--dropdown-hover-bg);
-    }
-
-    .custom-select-options li.selected {
+    .currency-selection button:hover {
         background-color: var(--hover-bg);
-        font-weight: 600;
+    }
+
+    .currency-selection button.active {
+        background: var(--active-currency-bg);
+        color: var(--active-currency-color);
+        border-color: transparent;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
     }
 
     /* Button Group */
@@ -477,8 +416,7 @@
         }
 
         input[type="number"],
-        input[type="text"],
-        .custom-select {
+        input[type="text"] {
             padding: 12px 15px;
             font-size: 15px;
             border-radius: 10px;
@@ -616,20 +554,15 @@
     <div class="container" id="mainCalculatorContainer">
         <section id="forexCalculator">
             <div class="input-group">
-                <label for="currencyPair">Currency Pair</label>
-                <div class="custom-select-wrapper">
-                    <select id="currencyPair" style="display: none;">
-                        <option value="XAUUSD">XAUUSD</option>
-                        <option value="EURUSD">EURUSD</option>
-                        <option value="US30">US30</option>
-                    </select>
-                    <div class="custom-select" tabindex="0">
-                        <span class="custom-select-trigger"></span>
-                        <div class="custom-select-arrow"></div>
-                    </div>
-                    <ul class="custom-select-options"></ul>
+                <label>Currency Pair</label>
+                <div class="currency-selection">
+                    <button id="btnXAUUSD" class="currency-button active" onclick="selectCurrency('XAUUSD')">XAUUSD</button>
+                    <button id="btnEURUSD" class="currency-button" onclick="selectCurrency('EURUSD')">EURUSD</button>
                 </div>
             </div>
+            
+            <input type="hidden" id="currencyPair" value="XAUUSD">
+
             <div class="input-group">
                 <label for="forexAccountSize">Account Size ($)</label>
                 <input type="number" id="forexAccountSize" min="0.01" step="0.01">
@@ -643,11 +576,11 @@
                 <input type="number" id="forexEntryPrice" min="0.00000001" step="0.00000001">
             </div>
             <div class="input-group">
-                <label for="forexStopPips" id="stopLossLabel" class="loss-label">Stop Loss (SL)</label>
+                <label for="forexStopPips" id="stopLossLabel" class="loss-label">SL ($)</label>
                 <input type="number" id="forexStopPips" min="0.1" step="0.1">
             </div>
             <div class="input-group">
-                <label for="forexTpPips" id="takeProfitLabel" class="profit-label">Take Profit (TP)</label>
+                <label for="forexTpPips" id="takeProfitLabel" class="profit-label">TP ($)</label>
                 <input type="number" id="forexTpPips" min="0.1" step="0.1">
             </div>
             <div class="button-group">
@@ -698,6 +631,15 @@
             }
         }
 
+        // --- Currency Selection Logic ---
+        function selectCurrency(pair) {
+            const buttons = document.querySelectorAll('.currency-button');
+            buttons.forEach(button => button.classList.remove('active'));
+            document.getElementById(`btn${pair}`).classList.add('active');
+            document.getElementById('currencyPair').value = pair;
+            updateInputLabels(pair);
+        }
+
         function calculateForex(tradeType) {
             document.getElementById("output").style.display = "flex";
 
@@ -720,17 +662,14 @@
             if (isNaN(entryPrice) || entryPrice <= 0) {
                 const priceRanges = {
                     'XAUUSD': [2200, 2500, 2],
-                    'US30': [34000, 39000, 0], // Added US30
-                    'EURUSD': [1.05, 1.15, 5], 'GBPUSD': [1.20, 1.30, 5], 'USDCHF': [0.88, 0.95, 5],
-                    'USDCAD': [1.30, 1.40, 5], 'AUDUSD': [0.65, 0.75, 5],
-                    'NZDUSD': [0.60, 0.70, 5]
+                    'EURUSD': [1.05, 1.15, 5],
                 };
                 const [min, max, decimals] = priceRanges[currencyPair] || [1, 2, 5];
                 entryPrice = getRandomInRange(min, max, decimals);
                 document.getElementById('forexEntryPrice').value = entryPrice;
             }
             if (isNaN(inputStopLossValue) || inputStopLossValue <= 0) {
-                if (currencyPair === 'XAUUSD' || currencyPair === 'US30') {
+                if (currencyPair === 'XAUUSD') {
                     inputStopLossValue = getRandomInRange(5, 50, 2);
                 } else {
                     inputStopLossValue = getRandomInRange(10, 50, 1);
@@ -738,7 +677,7 @@
                 document.getElementById('forexStopPips').value = inputStopLossValue;
             }
             if (isNaN(inputTakeProfitValue) || inputTakeProfitValue <= 0) {
-                if (currencyPair === 'XAUUSD' || currencyPair === 'US30') {
+                if (currencyPair === 'XAUUSD') {
                     inputTakeProfitValue = getRandomInRange(10, 100, 2);
                 } else {
                     inputTakeProfitValue = getRandomInRange(50, 150, 1);
@@ -754,14 +693,7 @@
 
             const pairConfigs = {
                 'XAUUSD': { 'dollarPerPoint': 1, 'unitMultiplier': 100, 'pricePrecision': 2, 'isDollarBasedSLTP': true },
-                'US30': { 'dollarPerPoint': 0.1, 'unitMultiplier': 1, 'pricePrecision': 0, 'isDollarBasedSLTP': true },
                 'EURUSD': { 'pipSize': 0.0001, 'pricePrecision': 5, 'unitValueInUSD': 1 },
-                'USDCAD': { 'pipSize': 0.0001, 'pricePrecision': 5, 'unitValueInUSD': 1 },
-                'USDJPY': { 'pipSize': 0.01, 'pricePrecision': 3, 'unitValueInUSD': 1 },
-                'GBPUSD': { 'pipSize': 0.0001, 'pricePrecision': 5, 'unitValueInUSD': 1 },
-                'AUDUSD': { 'pipSize': 0.0001, 'pricePrecision': 5, 'unitValueInUSD': 1 },
-                'NZDUSD': { 'pipSize': 0.0001, 'pricePrecision': 5, 'unitValueInUSD': 1 },
-                'USDCHF': { 'pipSize': 0.0001, 'pricePrecision': 5, 'unitValueInUSD': 1 }
             };
 
             const config = pairConfigs[currencyPair];
@@ -805,15 +737,11 @@
             }
 
             let valuePerPipOrPointPerLot; 
-
-            if (currencyPair === 'US30') {
-                valuePerPipOrPointPerLot = 1; 
-            } else if (config.isDollarBasedSLTP) {
+            if (config.isDollarBasedSLTP) {
                 valuePerPipOrPointPerLot = config.unitMultiplier * config.dollarPerPoint;
             } else {
                 const quoteCurrency = currencyPair.substring(3);
                 const standardLotSize = 100000;
-
                 if (quoteCurrency === 'USD') {
                     valuePerPipOrPointPerLot = standardLotSize * config.pipSize; 
                 } else {
@@ -861,50 +789,7 @@
                 document.body.classList.add('dark');
             }
             updateDarkModeButtonText();
-
-            const selectWrapper = document.querySelector('.custom-select-wrapper');
-            if(selectWrapper) {
-                const nativeSelect = selectWrapper.querySelector('select');
-                const customSelect = selectWrapper.querySelector('.custom-select');
-                const customSelectTrigger = customSelect.querySelector('.custom-select-trigger');
-                const customOptions = selectWrapper.querySelector('.custom-select-options');
-
-                Array.from(nativeSelect.options).forEach(option => {
-                    const li = document.createElement('li');
-                    li.textContent = option.textContent;
-                    li.setAttribute('data-value', option.value);
-                    if (option.selected) {
-                        li.classList.add('selected');
-                        customSelectTrigger.textContent = option.textContent;
-                    }
-                    customOptions.appendChild(li);
-                });
-
-                customSelect.addEventListener('click', () => {
-                    selectWrapper.classList.toggle('open');
-                });
-
-                customOptions.addEventListener('click', (e) => {
-                    if (e.target.tagName === 'LI') {
-                        const value = e.target.getAttribute('data-value');
-                        const text = e.target.textContent;
-                        nativeSelect.value = value;
-                        customSelectTrigger.textContent = text;
-                        selectWrapper.classList.remove('open');
-                        customOptions.querySelector('.selected')?.classList.remove('selected');
-                        e.target.classList.add('selected');
-                        updateInputLabels(value);
-                    }
-                });
-
-                window.addEventListener('click', (e) => {
-                    if (!selectWrapper.contains(e.target)) {
-                        selectWrapper.classList.remove('open');
-                    }
-                });
-
-                updateInputLabels(nativeSelect.value);
-            }
+            updateInputLabels(document.getElementById('currencyPair').value);
         });
         
         window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
@@ -920,7 +805,7 @@
             const stopLossLabel = document.getElementById('stopLossLabel');
             const takeProfitLabel = document.getElementById('takeProfitLabel');
             
-            if (currencyPair === 'XAUUSD' || currencyPair === 'US30') {
+            if (currencyPair === 'XAUUSD') {
                 stopLossLabel.textContent = 'SL ($)';
                 takeProfitLabel.textContent = 'TP ($)';
             } else {
