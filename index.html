@@ -545,23 +545,17 @@
 </style>
 </head>
 <body>
-    <div class="fixed-settings-buttons">
-        <button class="dark-toggle" onclick="toggleDarkMode()">
-            <span>🌙 Dark Mode</span>
-        </button>
-    </div>
-
     <div class="container" id="mainCalculatorContainer">
         <section id="forexCalculator">
             <div class="input-group">
                 <label>Currency Pair</label>
                 <div class="currency-selection">
-                    <button id="btnXAUUSD" class="currency-button active" onclick="selectCurrency('XAUUSD')">XAUUSD</button>
+                    <button id="btnUSDJPY" class="currency-button active" onclick="selectCurrency('USDJPY')">USDJPY</button>
                     <button id="btnEURUSD" class="currency-button" onclick="selectCurrency('EURUSD')">EURUSD</button>
                 </div>
             </div>
             
-            <input type="hidden" id="currencyPair" value="XAUUSD">
+            <input type="hidden" id="currencyPair" value="USDJPY">
 
             <div class="input-group">
                 <label for="forexAccountSize">Account Size ($)</label>
@@ -576,12 +570,12 @@
                 <input type="number" id="forexEntryPrice" min="0.00000001" step="0.00000001">
             </div>
             <div class="input-group">
-                <label for="forexStopPips" id="stopLossLabel" class="loss-label">SL ($)</label>
-                <input type="number" id="forexStopPips" min="0.1" step="0.1">
+                <label for="forexTpPips" id="takeProfitLabel" class="profit-label">TP (Pips)</label>
+                <input type="number" id="forexTpPips" min="0.1" step="0.1">
             </div>
             <div class="input-group">
-                <label for="forexTpPips" id="takeProfitLabel" class="profit-label">TP ($)</label>
-                <input type="number" id="forexTpPips" min="0.1" step="0.1">
+                <label for="forexStopPips" id="stopLossLabel" class="loss-label">SL (Pips)</label>
+                <input type="number" id="forexStopPips" min="0.1" step="0.1">
             </div>
             <div class="button-group">
                 <button class="sell" onclick="calculateForex('short')">Sell</button>
@@ -616,21 +610,6 @@
             });
         }
 
-        // --- Dark Mode Toggle ---
-        function toggleDarkMode() {
-            document.body.classList.toggle("dark");
-            updateDarkModeButtonText();
-        }
-
-        function updateDarkModeButtonText() {
-            const darkModeButton = document.querySelector('.dark-toggle span');
-            if (document.body.classList.contains('dark')) {
-                darkModeButton.textContent = '☀️ Light Mode';
-            } else {
-                darkModeButton.textContent = '🌙 Dark Mode';
-            }
-        }
-
         // --- Currency Selection Logic ---
         function selectCurrency(pair) {
             const buttons = document.querySelectorAll('.currency-button');
@@ -661,7 +640,7 @@
             }
             if (isNaN(entryPrice) || entryPrice <= 0) {
                 const priceRanges = {
-                    'XAUUSD': [2200, 2500, 2],
+                    'USDJPY': [140, 160, 3], // New range for USDJPY
                     'EURUSD': [1.05, 1.15, 5],
                 };
                 const [min, max, decimals] = priceRanges[currencyPair] || [1, 2, 5];
@@ -669,16 +648,16 @@
                 document.getElementById('forexEntryPrice').value = entryPrice;
             }
             if (isNaN(inputStopLossValue) || inputStopLossValue <= 0) {
-                if (currencyPair === 'XAUUSD') {
-                    inputStopLossValue = getRandomInRange(5, 50, 2);
+                if (currencyPair === 'USDJPY') {
+                    inputStopLossValue = getRandomInRange(10, 50, 1);
                 } else {
                     inputStopLossValue = getRandomInRange(10, 50, 1);
                 }
                 document.getElementById('forexStopPips').value = inputStopLossValue;
             }
             if (isNaN(inputTakeProfitValue) || inputTakeProfitValue <= 0) {
-                if (currencyPair === 'XAUUSD') {
-                    inputTakeProfitValue = getRandomInRange(10, 100, 2);
+                if (currencyPair === 'USDJPY') {
+                    inputTakeProfitValue = getRandomInRange(50, 150, 1);
                 } else {
                     inputTakeProfitValue = getRandomInRange(50, 150, 1);
                 }
@@ -692,8 +671,8 @@
             let takeProfitPriceChangeInPriceUnits;
 
             const pairConfigs = {
-                'XAUUSD': { 'dollarPerPoint': 1, 'unitMultiplier': 100, 'pricePrecision': 2, 'isDollarBasedSLTP': true },
-                'EURUSD': { 'pipSize': 0.0001, 'pricePrecision': 5, 'unitValueInUSD': 1 },
+                'USDJPY': { 'pipSize': 0.01, 'pricePrecision': 3 }, // New config for USDJPY
+                'EURUSD': { 'pipSize': 0.0001, 'pricePrecision': 5 },
             };
 
             const config = pairConfigs[currencyPair];
@@ -705,13 +684,8 @@
 
             pricePrecision = config.pricePrecision;
 
-            if (config.isDollarBasedSLTP) {
-                stopLossPriceChangeInPriceUnits = inputStopLossValue;
-                takeProfitPriceChangeInPriceUnits = inputTakeProfitValue;
-            } else {
-                stopLossPriceChangeInPriceUnits = inputStopLossValue * config.pipSize;
-                takeProfitPriceChangeInPriceUnits = inputTakeProfitValue * config.pipSize;
-            }
+            stopLossPriceChangeInPriceUnits = inputStopLossValue * config.pipSize;
+            takeProfitPriceChangeInPriceUnits = inputTakeProfitValue * config.pipSize;
             
             const displayStopLossPrice = (tradeType === 'long') ? entryPrice - stopLossPriceChangeInPriceUnits : entryPrice + stopLossPriceChangeInPriceUnits;
             const displayTakeProfitPrice = (tradeType === 'long') ? entryPrice + takeProfitPriceChangeInPriceUnits : entryPrice - takeProfitPriceChangeInPriceUnits;
@@ -736,21 +710,20 @@
                 }
             }
 
-            let valuePerPipOrPointPerLot; 
-            if (config.isDollarBasedSLTP) {
-                valuePerPipOrPointPerLot = config.unitMultiplier * config.dollarPerPoint;
-            } else {
-                const quoteCurrency = currencyPair.substring(3);
-                const standardLotSize = 100000;
-                if (quoteCurrency === 'USD') {
-                    valuePerPipOrPointPerLot = standardLotSize * config.pipSize; 
-                } else {
-                    document.getElementById("output").innerHTML = `<p style="color: #e05e5e;">Calculation for cross-currency pair ${currencyPair} is not fully supported.</p>`;
-                    return;
-                }
-            }
+            const quoteCurrency = currencyPair.substring(3);
+            const standardLotSize = 100000;
             
-            // *** CORE LOGIC CHANGE: Spread removed from calculation ***
+            let valuePerPipOrPointPerLot; 
+            if (quoteCurrency === 'USD') {
+                valuePerPipOrPointPerLot = standardLotSize * config.pipSize; // Example for EURUSD: 100,000 * 0.0001 = $10
+            } else if (quoteCurrency === 'JPY') {
+                // For JPY pairs, the pip value is in JPY, so it needs to be converted to USD
+                valuePerPipOrPointPerLot = (standardLotSize * config.pipSize) / entryPrice;
+            } else {
+                document.getElementById("output").innerHTML = `<p style="color: #e05e5e;">Calculation for cross-currency pair ${currencyPair} is not fully supported.</p>`;
+                return;
+            }
+
             const effectiveStopLossDistance = inputStopLossValue;
 
             const totalDollarRiskPerLotAtSL = effectiveStopLossDistance * valuePerPipOrPointPerLot;
@@ -768,9 +741,8 @@
 
             let outputHtml = '<table>';
             outputHtml += createCopyableTableRow('Position Size (Lot)', `${positionSizeLots.toFixed(2)}`, positionSizeLots.toFixed(2));
-            outputHtml += createCopyableTableRow(' SL ', `${displayStopLossPrice.toFixed(pricePrecision)}`, displayStopLossPrice.toFixed(pricePrecision));
-            outputHtml += createCopyableTableRow(' TP ', `${displayTakeProfitPrice.toFixed(pricePrecision)}`, displayTakeProfitPrice.toFixed(pricePrecision));
-            // Modified lines with new class for coloring
+            outputHtml += createCopyableTableRow(' TP ', `${displayTakeProfitPrice.toFixed(pricePrecision)}`, displayTakeProfitPrice.toFixed(pricePrecision)); // TP moved up
+            outputHtml += createCopyableTableRow(' SL ', `${displayStopLossPrice.toFixed(pricePrecision)}`, displayStopLossPrice.toFixed(pricePrecision)); // SL moved down
             outputHtml += `<tr class="profit-row"><td> Profit ($)</td><td>+${potentialProfit.toFixed(2)}</td></tr>`;
             outputHtml += `<tr class="loss-row"><td> Loss ($)</td><td>-${potentialLoss.toFixed(2)}</td></tr>`;
             outputHtml += `<tr><td>Risk : Reward</td><td>1 : ${riskRewardRatio}</td></tr>`;
@@ -784,31 +756,28 @@
         }
 
         // --- Event Listeners and Initial Setup ---
-        document.addEventListener('DOMContentLoaded', function() {
+        function applyDeviceColorScheme() {
             if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-                document.body.classList.add('dark');
-            }
-            updateDarkModeButtonText();
-            updateInputLabels(document.getElementById('currencyPair').value);
-        });
-        
-        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
-            if(e.matches) {
                 document.body.classList.add('dark');
             } else {
                 document.body.classList.remove('dark');
             }
-            updateDarkModeButtonText();
-        });
+        }
 
+        document.addEventListener('DOMContentLoaded', function() {
+            applyDeviceColorScheme();
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', applyDeviceColorScheme);
+            updateInputLabels(document.getElementById('currencyPair').value);
+        });
+        
         function updateInputLabels(currencyPair) {
             const stopLossLabel = document.getElementById('stopLossLabel');
             const takeProfitLabel = document.getElementById('takeProfitLabel');
             
-            if (currencyPair === 'XAUUSD') {
-                stopLossLabel.textContent = 'SL ($)';
-                takeProfitLabel.textContent = 'TP ($)';
-            } else {
+            if (currencyPair === 'USDJPY') {
+                stopLossLabel.textContent = 'SL (Pips)';
+                takeProfitLabel.textContent = 'TP (Pips)';
+            } else if (currencyPair === 'EURUSD') {
                 stopLossLabel.textContent = 'SL (Pips)';
                 takeProfitLabel.textContent = 'TP (Pips)';
             }
