@@ -551,7 +551,6 @@
                 <label>Currency Pair</label>
                 <div class="currency-selection">
                     <button id="btnUSDJPY" class="currency-button active" onclick="selectCurrency('USDJPY')">USDJPY</button>
-                    <button id="btnEURUSD" class="currency-button" onclick="selectCurrency('EURUSD')">EURUSD</button>
                 </div>
             </div>
             
@@ -641,7 +640,6 @@
             if (isNaN(entryPrice) || entryPrice <= 0) {
                 const priceRanges = {
                     'USDJPY': [140, 160, 3], // New range for USDJPY
-                    'EURUSD': [1.05, 1.15, 5],
                 };
                 const [min, max, decimals] = priceRanges[currencyPair] || [1, 2, 5];
                 entryPrice = getRandomInRange(min, max, decimals);
@@ -672,7 +670,6 @@
 
             const pairConfigs = {
                 'USDJPY': { 'pipSize': 0.01, 'pricePrecision': 3 }, // New config for USDJPY
-                'EURUSD': { 'pipSize': 0.0001, 'pricePrecision': 5 },
             };
 
             const config = pairConfigs[currencyPair];
@@ -775,9 +772,6 @@
             const takeProfitLabel = document.getElementById('takeProfitLabel');
             
             if (currencyPair === 'USDJPY') {
-                stopLossLabel.textContent = 'SL (Pips)';
-                takeProfitLabel.textContent = 'TP (Pips)';
-            } else if (currencyPair === 'EURUSD') {
                 stopLossLabel.textContent = 'SL (Pips)';
                 takeProfitLabel.textContent = 'TP (Pips)';
             }
