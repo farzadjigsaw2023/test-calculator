@@ -157,14 +157,16 @@
         border-color: #8be0ff;
     }
 
-    /* New currency selection buttons */
-    .currency-selection {
+    /* Styles for Selection Buttons (Currency & Risk) */
+    .currency-selection,
+    .risk-selection { /* Now applying to both */
         display: flex;
         gap: 15px;
         margin-bottom: 20px;
     }
 
-    .currency-selection button {
+    .currency-selection button,
+    .risk-selection button {
         flex: 1;
         padding: 14px 18px;
         font-size: 16px;
@@ -177,11 +179,13 @@
         transition: all 0.3s ease;
     }
 
-    .currency-selection button:hover {
+    .currency-selection button:hover,
+    .risk-selection button:hover {
         background-color: var(--hover-bg);
     }
 
-    .currency-selection button.active {
+    .currency-selection button.active,
+    .risk-selection button.active {
         background: var(--active-currency-bg);
         color: var(--active-currency-color);
         border-color: transparent;
@@ -550,20 +554,27 @@
             <div class="input-group">
                 <label>Currency Pair</label>
                 <div class="currency-selection">
-                    <button id="btnUSDJPY" class="currency-button active" onclick="selectCurrency('USDJPY')">USDJPY</button>
+                    <button id="btnEURUSD" class="currency-button active" onclick="selectCurrency('EURUSD')">EURUSD</button>
+                    <button id="btnUSDJPY" class="currency-button" onclick="selectCurrency('USDJPY')">USDJPY</button>
                 </div>
             </div>
             
-            <input type="hidden" id="currencyPair" value="USDJPY">
+            <input type="hidden" id="currencyPair" value="EURUSD">
 
             <div class="input-group">
                 <label for="forexAccountSize">Account Size ($)</label>
                 <input type="number" id="forexAccountSize" min="0.01" step="0.01">
             </div>
+
             <div class="input-group">
-                <label for="forexRiskPercent">Risk (%)</label>
-                <input type="number" id="forexRiskPercent" min="0.01" step="0.01">
+                <label>Risk (%)</label>
+                <div class="risk-selection">
+                    <button id="btnRisk1" class="risk-button active" onclick="selectRisk(1)">1%</button>
+                    <button id="btnRisk05" class="risk-button" onclick="selectRisk(0.5)">0.5%</button>
+                </div>
             </div>
+            <input type="hidden" id="forexRiskPercent" value="1"> 
+            
             <div class="input-group">
                 <label for="forexEntryPrice">Entry Price</label>
                 <input type="number" id="forexEntryPrice" min="0.00000001" step="0.00000001">
@@ -618,11 +629,23 @@
             updateInputLabels(pair);
         }
 
+        // --- Risk Selection Logic (New) ---
+        function selectRisk(percent) {
+            const buttons = document.querySelectorAll('.risk-button');
+            buttons.forEach(button => button.classList.remove('active'));
+            
+            // Note: The ID logic uses 'btnRisk1' for 1% and 'btnRisk05' for 0.5%
+            const idSuffix = (percent === 1) ? '1' : '05'; 
+            document.getElementById(`btnRisk${idSuffix}`).classList.add('active');
+            document.getElementById('forexRiskPercent').value = percent;
+        }
+
         function calculateForex(tradeType) {
             document.getElementById("output").style.display = "flex";
 
             let accountSize = parseFloat(document.getElementById('forexAccountSize').value);
-            let riskPercent = parseFloat(document.getElementById('forexRiskPercent').value);
+            // Risk is now read from the hidden input, set by selectRisk function
+            let riskPercent = parseFloat(document.getElementById('forexRiskPercent').value); 
             let currencyPair = document.getElementById('currencyPair').value;
             let entryPrice = parseFloat(document.getElementById('forexEntryPrice').value);
             let inputStopLossValue = parseFloat(document.getElementById('forexStopPips').value);
@@ -633,30 +656,31 @@
                 accountSize = getRandomInRange(1000, 10000, 2);
                 document.getElementById('forexAccountSize').value = accountSize;
             }
-            if (isNaN(riskPercent) || riskPercent <= 0) {
-                riskPercent = getRandomInRange(0.1, 2, 2);
-                document.getElementById('forexRiskPercent').value = riskPercent;
-            }
+            // Risk percent is now always selected (defaults to 1%), so no need to generate random risk
+
             if (isNaN(entryPrice) || entryPrice <= 0) {
                 const priceRanges = {
-                    'USDJPY': [140, 160, 3], // New range for USDJPY
+                    'EURUSD': [1.05, 1.15, 5], // New range for EURUSD
+                    'USDJPY': [140, 160, 3], 
                 };
                 const [min, max, decimals] = priceRanges[currencyPair] || [1, 2, 5];
                 entryPrice = getRandomInRange(min, max, decimals);
                 document.getElementById('forexEntryPrice').value = entryPrice;
             }
             if (isNaN(inputStopLossValue) || inputStopLossValue <= 0) {
+                // Adjusting ranges for more realistic pips, 10-50 for EURUSD and USDJPY
                 if (currencyPair === 'USDJPY') {
                     inputStopLossValue = getRandomInRange(10, 50, 1);
-                } else {
+                } else { // EURUSD
                     inputStopLossValue = getRandomInRange(10, 50, 1);
                 }
                 document.getElementById('forexStopPips').value = inputStopLossValue;
             }
             if (isNaN(inputTakeProfitValue) || inputTakeProfitValue <= 0) {
+                // Adjusting ranges for more realistic pips, 50-150 for EURUSD and USDJPY
                 if (currencyPair === 'USDJPY') {
                     inputTakeProfitValue = getRandomInRange(50, 150, 1);
-                } else {
+                } else { // EURUSD
                     inputTakeProfitValue = getRandomInRange(50, 150, 1);
                 }
                 document.getElementById('forexTpPips').value = inputTakeProfitValue;
@@ -669,7 +693,8 @@
             let takeProfitPriceChangeInPriceUnits;
 
             const pairConfigs = {
-                'USDJPY': { 'pipSize': 0.01, 'pricePrecision': 3 }, // New config for USDJPY
+                'EURUSD': { 'pipSize': 0.0001, 'pricePrecision': 5 }, // Config for EURUSD
+                'USDJPY': { 'pipSize': 0.01, 'pricePrecision': 3 },
             };
 
             const config = pairConfigs[currencyPair];
@@ -687,6 +712,7 @@
             const displayStopLossPrice = (tradeType === 'long') ? entryPrice - stopLossPriceChangeInPriceUnits : entryPrice + stopLossPriceChangeInPriceUnits;
             const displayTakeProfitPrice = (tradeType === 'long') ? entryPrice + takeProfitPriceChangeInPriceUnits : entryPrice - takeProfitPriceChangeInPriceUnits;
 
+            // --- Validation Logic ---
             if (tradeType === 'long') {
                 if (displayStopLossPrice >= entryPrice) {
                     document.getElementById("output").innerHTML = `<p style="color: #e05e5e;">For a **Buy (Long)** position, the Stop Loss price must be **lower** than the Entry Price.</p>`;
@@ -706,15 +732,18 @@
                     return;
                 }
             }
-
+            
+            // --- Position Size Calculation Logic ---
             const quoteCurrency = currencyPair.substring(3);
             const standardLotSize = 100000;
             
             let valuePerPipOrPointPerLot; 
             if (quoteCurrency === 'USD') {
-                valuePerPipOrPointPerLot = standardLotSize * config.pipSize; // Example for EURUSD: 100,000 * 0.0001 = $10
+                // For USD quote pairs (e.g., EURUSD), the pip value is in USD. 
+                // EURUSD: 100,000 * 0.0001 = $10 per standard lot
+                valuePerPipOrPointPerLot = standardLotSize * config.pipSize; 
             } else if (quoteCurrency === 'JPY') {
-                // For JPY pairs, the pip value is in JPY, so it needs to be converted to USD
+                // For JPY pairs (e.g., USDJPY), the pip value is in JPY, converted to USD by dividing by Entry Price.
                 valuePerPipOrPointPerLot = (standardLotSize * config.pipSize) / entryPrice;
             } else {
                 document.getElementById("output").innerHTML = `<p style="color: #e05e5e;">Calculation for cross-currency pair ${currencyPair} is not fully supported.</p>`;
@@ -738,8 +767,8 @@
 
             let outputHtml = '<table>';
             outputHtml += createCopyableTableRow('Position Size (Lot)', `${positionSizeLots.toFixed(2)}`, positionSizeLots.toFixed(2));
-            outputHtml += createCopyableTableRow(' TP ', `${displayTakeProfitPrice.toFixed(pricePrecision)}`, displayTakeProfitPrice.toFixed(pricePrecision)); // TP moved up
-            outputHtml += createCopyableTableRow(' SL ', `${displayStopLossPrice.toFixed(pricePrecision)}`, displayStopLossPrice.toFixed(pricePrecision)); // SL moved down
+            outputHtml += createCopyableTableRow(' TP ', `${displayTakeProfitPrice.toFixed(pricePrecision)}`, displayTakeProfitPrice.toFixed(pricePrecision)); 
+            outputHtml += createCopyableTableRow(' SL ', `${displayStopLossPrice.toFixed(pricePrecision)}`, displayStopLossPrice.toFixed(pricePrecision));
             outputHtml += `<tr class="profit-row"><td> Profit ($)</td><td>+${potentialProfit.toFixed(2)}</td></tr>`;
             outputHtml += `<tr class="loss-row"><td> Loss ($)</td><td>-${potentialLoss.toFixed(2)}</td></tr>`;
             outputHtml += `<tr><td>Risk : Reward</td><td>1 : ${riskRewardRatio}</td></tr>`;
@@ -764,6 +793,11 @@
         document.addEventListener('DOMContentLoaded', function() {
             applyDeviceColorScheme();
             window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', applyDeviceColorScheme);
+            
+            // Set initial active states for EURUSD and 1% Risk
+            selectCurrency('EURUSD');
+            selectRisk(1);
+
             updateInputLabels(document.getElementById('currencyPair').value);
         });
         
@@ -771,10 +805,9 @@
             const stopLossLabel = document.getElementById('stopLossLabel');
             const takeProfitLabel = document.getElementById('takeProfitLabel');
             
-            if (currencyPair === 'USDJPY') {
-                stopLossLabel.textContent = 'SL (Pips)';
-                takeProfitLabel.textContent = 'TP (Pips)';
-            }
+            // Labels remain "Pips" for both EURUSD (standard 4-digit pairs) and USDJPY (standard 2-digit pairs)
+            stopLossLabel.textContent = 'SL (Pips)';
+            takeProfitLabel.textContent = 'TP (Pips)';
         }
     </script>
 </body>
