@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Modern Calculator</title>
+    <title>Forex Position Size Calculator</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
     /* Global Styles & Variables */
@@ -88,6 +88,468 @@
         padding: 40px 30px;
         border-radius: 20px;
         box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+        transition: background 0.4s ease, color 0.4s ease, box-shadow 0.4s ease;
+        flex-grow: 1;
+        border: 1px solid var(--border-color);
+    }
+
+    label {
+        display: block;
+        text-align: left;
+        margin: 20px 0 8px;
+        font-weight: 600;
+        font-size: 16px;
+        color: var(--label-color);
+    }
+
+    input[type="number"] {
+        -moz-appearance: textfield;
+        appearance: none;
+    }
+
+    input[type="number"]::-webkit-outer-spin-button,
+    input[type="number"]::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    input[type="number"],
+    input[type="text"] {
+        width: 100%;
+        padding: 14px 18px;
+        font-size: 16px;
+        border-radius: 12px;
+        border: 1.5px solid var(--border-color);
+        background: var(--input-bg);
+        color: var(--text-color);
+        font-weight: 500;
+        transition: all 0.3s ease;
+        box-sizing: border-box;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        text-align: left;
+        box-shadow: inset 0 2px 4px rgba(0,0,0,0.04);
+    }
+
+    input[type="number"]::placeholder,
+    input[type="text"]::placeholder {
+        color: #90a4ae;
+        font-style: italic;
+        text-align: left;
+    }
+
+    body.dark input[type="number"]::placeholder,
+    body.dark input[type="text"]::placeholder {
+        color: #7b8b9a;
+    }
+
+    input[type="number"]:focus,
+    input[type="text"]:focus,
+    .custom-select:focus {
+        border-color: #007bff;
+        outline: none;
+        box-shadow: 0 0 0 4px var(--focus-glow);
+    }
+
+    body.dark input[type="number"]:focus,
+    body.dark input[type="text"]:focus {
+        border-color: #8be0ff;
+    }
+
+    /* Styles for Selection Buttons (Currency & Risk) */
+    .currency-selection,
+    .risk-selection { 
+        display: flex;
+        gap: 15px;
+        margin-bottom: 20px;
+    }
+
+    .currency-selection button,
+    .risk-selection button {
+        flex: 1;
+        padding: 14px 18px;
+        font-size: 16px;
+        font-weight: 600;
+        border-radius: 12px;
+        border: 1.5px solid var(--border-color);
+        background: var(--input-bg);
+        color: var(--label-color);
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .currency-selection button:hover,
+    .risk-selection button:hover {
+        background-color: var(--hover-bg);
+    }
+
+    .currency-selection button.active,
+    .risk-selection button.active {
+        background: var(--active-currency-bg);
+        color: var(--active-currency-color);
+        border-color: transparent;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    /* Button Group */
+    .button-group {
+        display: flex;
+        gap: 15px;
+        margin-top: 30px;
+        direction: ltr; /* Ensure LTR */
+    }
+
+    button {
+        flex: 1;
+        border: none;
+        color: white;
+        padding: 15px 25px;
+        font-size: 17px;
+        font-weight: 600;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        font-family: 'Poppins', sans-serif;
+        letter-spacing: 0.5px;
+    }
+
+    button.buy {
+        background: var(--button-buy-bg);
+    }
+
+    button.buy:hover {
+        background: var(--button-buy-hover);
+        transform: translateY(-3px);
+        box-shadow: 0 12px 25px rgba(0,0,0,0.2);
+    }
+
+    button.sell {
+        background: var(--button-sell-bg);
+    }
+
+    button.sell:hover {
+        background: var(--button-sell-hover);
+        transform: translateY(-3px);
+        box-shadow: 0 12px 25px rgba(0,0,0,0.2);
+    }
+
+    /* Result Section */
+    .result {
+        margin-top: 40px;
+        background: var(--result-bg);
+        padding: 30px 25px;
+        border-radius: 18px;
+        font-size: 18px;
+        color: var(--result-text);
+        font-weight: 600;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        transition: background 0.4s ease, color 0.4s ease, box-shadow 0.4s ease;
+        text-align: left;
+        min-height: 250px;
+        display: flex;
+        align-items: flex-start;
+        justify-content: flex-start;
+        flex-direction: column;
+        border: 1px solid rgba(0,0,0,0.05);
+    }
+
+    .result span {
+        font-family: 'Poppins', sans-serif;
+    }
+
+    table {
+        width: 100%;
+        max-width: 100%;
+        margin: 20px auto;
+        border-collapse: separate;
+        border-spacing: 0 10px;
+        font-weight: 500;
+        font-size: 16px;
+        text-align: left;
+        transition: background 0.4s ease, color 0.4s ease;
+    }
+
+    th, td {
+        padding: 15px 20px;
+        border-radius: 10px;
+        background: var(--table-bg);
+        color: var(--text-color);
+        transition: background 0.4s ease, color 0.4s ease, background-color 0.3s ease;
+        text-align: left;
+        font-family: 'Poppins', sans-serif;
+        border: 1px solid var(--border-color);
+    }
+
+    th {
+        background: var(--table-header);
+        color: white;
+        text-align: left;
+        border: none;
+        font-weight: 600;
+    }
+
+    table tr:first-child th:first-child { border-top-left-radius: 10px; }
+    table tr:first-child th:last-child { border-top-right-radius: 10px; }
+    table tr:last-child td:first-child { border-bottom-left-radius: 10px; }
+    table tr:last-child td:last-child { border-bottom-right-radius: 10px; }
+
+    tr:hover td {
+        background-color: var(--hover-bg);
+    }
+
+    /* Fixed Settings Button (Dark Mode Toggle) */
+    .fixed-settings-buttons {
+        position: fixed;
+        top: 25px;
+        right: 25px; /* Positioned to the right for LTR */
+        left: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        z-index: 1000;
+        transition: background 0.4s ease, box-shadow 0.4s ease;
+    }
+
+    .fixed-settings-buttons button {
+        width: 180px;
+        padding: 12px 18px;
+        font-size: 16px;
+        font-weight: 500;
+        border-radius: 15px;
+        box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+        background: var(--toggle-button-bg);
+        color: white;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        position: relative;
+    }
+
+    .fixed-settings-buttons button:hover {
+        background: var(--toggle-button-hover);
+        transform: translateY(-2px);
+        box-shadow: 0 9px 18px rgba(0,0,0,0.15);
+    }
+
+    body:not(.dark) .dark-toggle {
+        background: linear-gradient(45deg, #007bff, #0056b3);
+    }
+
+    body:not(.dark) .dark-toggle:hover {
+        background: linear-gradient(45deg, #0056b3, #007bff);
+    }
+
+    .fixed-settings-buttons button svg {
+        width: 18px;
+        height: 18px;
+        fill: white;
+    }
+
+    /* Copy Icon */
+    .copy-icon {
+        cursor: pointer;
+        margin-left: 10px;
+        width: 18px;
+        height: 18px;
+        vertical-align: middle;
+        fill: var(--copy-icon-color);
+        transition: fill 0.3s ease;
+    }
+
+    .copy-icon:hover {
+        fill: #007bff;
+    }
+    
+    /* New styles for Profit and Loss colors */
+    .profit-row td {
+        color: #28a745; /* Green color for profit */
+    }
+    
+    .loss-row td {
+        color: #dc3545; /* Red color for loss */
+    }
+
+    /* New styles for input labels */
+    .loss-label {
+        color: #dc3545; /* Red color for Stop Loss label */
+    }
+
+    .profit-label {
+        color: #28a745; /* Green color for Take Profit label */
+    }
+
+    /* Responsive Adjustments (Omitted for brevity, assuming carried over from previous code) */
+    @media (max-width: 768px) {
+        body { padding: 20px; font-size: 16px; }
+        .container { padding: 30px 20px; }
+        .currency-selection button, .risk-selection button, input[type="number"] { padding: 12px 15px; font-size: 15px; }
+        .button-group { flex-direction: column; }
+    }
+    @media (max-width: 480px) {
+        body { padding: 15px; }
+        .fixed-settings-buttons { position: static; flex-direction: row; }
+        .container { padding: 20px 15px; }
+    }
+</style>
+</head>
+<body>
+    <div class="container" id="mainCalculatorContainer">
+        <section id="forexCalculator">
+            <div class="input-group">
+                <label>Currency Pair</label>
+                <div class="currency-selection">
+                    <button id="btnUSDCAD" class="currency-button active" onclick="selectCurrency('USDCAD')">USDCAD</button>
+                    <button id="btnUSDJPY" class="currency-button" onclick="selectCurrency('USDJPY')">USDJPY</button>
+                </div>
+            </div>
+            
+            <input type="hidden" id="currencyPair" value="USDCAD"> <div class="input-group">
+                <label for="forexAccountSize">Account Size ($)</label>
+                <input type="number" id="forexAccountSize" min="0.01" step="0.01">
+            </div>
+
+            <div class="input-group">
+                <label>Risk Percentage</label>
+                <div class="risk-selection">
+                    <button id="btnRisk1" class="risk-button active" onclick="selectRisk(1)">1%</button>
+                    <button id="btnRisk05" class="risk-button" onclick="selectRisk(0.5)">0.5%</button>
+                </div>
+            </div>
+            <input type="hidden" id="forexRiskPercent" value="1"> 
+            
+            <div class="input-group">
+                <label for="forexEntryPrice">Entry Price</label>
+                <input type="number" id="forexEntryPrice" min="0.00000001" step="0.00000001">
+            </div>
+            <div class="input-group">
+                <label for="forexTpPips" id="takeProfitLabel" class="profit-label">TP (Pips)</label>
+                <input type="number" id="forexTpPips" min="0.1" step="0.1">
+            </div>
+            <div class="input-group">
+                <label for="forexStopPips" id="stopLossLabel" class="loss-label">SL (Pips)</label>
+                <input type="number" id="forexStopPips" min="0.1" step="0.1">
+            </div>
+            <div class="button-group">
+                <button class="sell" onclick="calculateForex('short')">Sell</button>
+                <button class="buy" onclick="calculateForex('long')">Buy</button>
+            </div>
+        </section>
+        <div id="output" class="result" style="display: none;">
+        </div>
+    </div>
+    
+    <script>
+        // --- Utility Functions (Not changed) ---
+        function getRandomInRange(min, max, decimals = 2) {
+            const factor = Math.pow(10, decimals);
+            return Math.round((Math.random() * (max - min) + min) * factor) / factor;
+        }
+
+        function copyValue(event, value) {
+            event.stopPropagation();
+            navigator.clipboard.writeText(value).then(() => {
+                const iconElement = event.currentTarget;
+                const originalInnerHTML = iconElement.innerHTML;
+                const originalFill = iconElement.style.fill;
+                iconElement.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="20px" height="20px"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>'; /* Checkmark SVG */
+                iconElement.style.fill = '#28a745'; 
+                setTimeout(() => {
+                    iconElement.innerHTML = originalInnerHTML;
+                    iconElement.style.fill = originalFill;
+                }, 1500);
+            }).catch(err => {
+                console.error('Failed to copy: ', err);
+            });
+        }
+
+        // --- Selection Logic (Not changed) ---
+        function selectCurrency(pair) {
+            const buttons = document.querySelectorAll('.currency-button');
+            buttons.forEach(button => button.classList.remove('active'));
+            document.getElementById(`btn${pair}`).classList.add('active');
+            document.getElementById('currencyPair').value = pair;
+            updateInputLabels(pair);
+        }
+
+        function selectRisk(percent) {
+            const buttons = document.querySelectorAll('.risk-button');
+            buttons.forEach(button => button.classList.remove('active'));
+            
+            const idSuffix = (percent === 1) ? '1' : '05'; 
+            document.getElementById(`btnRisk${idSuffix}`).classList.add('active');
+            document.getElementById('forexRiskPercent').value = percent;
+        }
+
+        function calculateForex(tradeType) {
+            document.getElementById("output").style.display = "flex";
+
+            let accountSize = parseFloat(document.getElementById('forexAccountSize').value);
+            let riskPercent = parseFloat(document.getElementById('forexRiskPercent').value); 
+            let currencyPair = document.getElementById('currencyPair').value;
+            let entryPrice = parseFloat(document.getElementById('forexEntryPrice').value);
+            let inputStopLossValue = parseFloat(document.getElementById('forexStopPips').value);
+            let inputTakeProfitValue = parseFloat(document.getElementById('forexTpPips').value);
+
+            // Default values and input validation...
+            if (isNaN(accountSize) || accountSize <= 0) {
+                accountSize = getRandomInRange(1000, 10000, 2);
+                document.getElementById('forexAccountSize').value = accountSize;
+            }
+
+            // --- Updated Price Ranges (EURUSD removed, USDCAD added) ---
+            if (isNaN(entryPrice) || entryPrice <= 0) {
+                const priceRanges = {
+                    'USDCAD': [1.25000, 1.35000, 5], // Added USDCAD range (5 decimals)
+                    'USDJPY': [140.000, 160.000, 3], // 3 decimals for JPY pairs (pips are 0.01)
+                };
+                const [min, max, decimals] = priceRanges[currencyPair] || [1, 2, 5];
+                entryPrice = getRandomInRange(min, max, decimals);
+                document.getElementById('forexEntryPrice').value = entryPrice;
+            }
+            if (isNaN(inputStopLossValue) || inputStopLossValue <= 0) {
+                inputStopLossValue = getRandomInRange(10, 50, 1);
+                document.getElementById('forexStopPips').value = inputStopLossValue;
+            }
+            if (isNaN(inputTakeProfitValue) || inputTakeProfitValue <= 0) {
+                inputTakeProfitValue = getRandomInRange(50, 150, 1);
+                document.getElementById('forexTpPips').value = inputTakeProfitValue;
+            }
+
+            const riskAmount = accountSize * (riskPercent / 100);
+
+            let pricePrecision;
+            let stopLossPriceChangeInPriceUnits;
+            let takeProfitPriceChangeInPriceUnits;
+
+            // --- Updated Pair Configurations (EURUSD removed, USDCAD added) ---
+            const pairConfigs = {
+                'USDCAD': { 'pipSize': 0.0001, 'pricePrecision': 5 }, // USDCAD config
+                'USDJPY': { 'pipSize': 0.01, 'pricePrecision': 3 },
+            };
+
+            const config = pairConfigs[currencyPair];
+
+            if (!config) {
+                document.getElementById("output").innerHTML = `<p style="color: #e05e5e;">Selected currency pair (${currencyPair}) is not supported.</p>`;
+                return;
+            }
+
+            pricePrecision = config.pricePrecision;
+
+            stopLossPriceChangeInPriceUnits = inputStopLossValue * config.pipSize;
+            takeProfitPriceChangeInPriceUnits = inputTakeProfitValue * config.pipSize;
+            
+            const displayStopLossPrice = (tradeType === 'long') ? entryPrice - stopLossPriceChangeInPriceUnits : entryPrice + stopLossPriceChangeInPriceUnits;
+            const displayTakeProfitPrice = (tradeType === 'long') ? entryPrice + takeProfitPriceChangeInPriceUnits : entryPrice - takeProfitPriceChangeInPriceUnits;
+
+            // ... (Validation Logic is unchanged) ...
+            if (tradeType === 'long') {
+                if (display        box-shadow: 0 15px 40px rgba(0,0,0,0.1);
         transition: background 0.4s ease, color 0.4s ease, box-shadow 0.4s ease;
         flex-grow: 1;
         border: 1px solid var(--border-color);
@@ -812,3 +1274,4 @@
     </script>
 </body>
 </html>
+
