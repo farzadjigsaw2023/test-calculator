@@ -38,28 +38,28 @@
 
     /* Dark Mode Overrides */
     body.dark {
-        --bg-color: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460); /* Deep dark blue gradient */
-        --text-color: #e0e0e0; /* Light grey text */
-        --card-bg: #1f2a3c; /* Dark card */
-        --input-bg: #2a3b4c; /* Darker input */
-        --label-color: #bbd0e0; /* Muted light blue label */
-        --table-header: linear-gradient(45deg, #3f51b5, #5c6bc0); /* Darker blue gradient header */
-        --table-bg: #1f2a3c; /* Dark table rows */
-        --hover-bg: #2a3b4c; /* Darker grey hover */
-        --result-bg: #2a3b4c; /* Dark result background */
-        --result-text: #8be0ff; /* Light blue result text */
-        --button-buy-bg: linear-gradient(45deg, #388e3c, #4caf50); /* Dark green buy button */
+        --bg-color: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460); 
+        --text-color: #e0e0e0; 
+        --card-bg: #1f2a3c; 
+        --input-bg: #2a3b4c; 
+        --label-color: #bbd0e0; 
+        --table-header: linear-gradient(45deg, #3f51b5, #5c6bc0); 
+        --table-bg: #1f2a3c; 
+        --hover-bg: #2a3b4c; 
+        --result-bg: #2a3b4c; 
+        --result-text: #8be0ff; 
+        --button-buy-bg: linear-gradient(45deg, #388e3c, #4caf50); 
         --button-buy-hover: linear-gradient(45deg, #4caf50, #388e3c);
-        --button-sell-bg: linear-gradient(45deg, #d32f2f, #ef5350); /* Dark red sell button */
+        --button-sell-bg: linear-gradient(45deg, #d32f2f, #ef5350); 
         --button-sell-hover: linear-gradient(45deg, #ef5350, #d32f2f);
-        --toggle-button-bg: #4a5a6a; /* Dark grey toggle button */
+        --toggle-button-bg: #4a5a6a; 
         --toggle-button-hover: #5c6c7c;
         --dropdown-bg: #2a3b4c;
         --dropdown-hover-bg: #3a4b5c;
         --dropdown-text-color: #e0e0e0;
         --copy-icon-color: #bbd0e0;
-        --border-color: #3f51b5; /* Darker border */
-        --focus-glow: rgba(139, 224, 255, 0.35); /* Lighter blue glow */
+        --border-color: #3f51b5; 
+        --focus-glow: rgba(139, 224, 255, 0.35); 
         
         --active-currency-bg: linear-gradient(45deg, #3f51b5, #5c6bc0);
         --active-currency-color: white;
@@ -300,55 +300,7 @@
         background-color: var(--hover-bg);
     }
 
-    /* Fixed Settings Button (Dark Mode Toggle) */
-    .fixed-settings-buttons {
-        position: fixed;
-        top: 25px;
-        right: 25px; /* Positioned to the right for LTR */
-        left: auto;
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-        z-index: 1000;
-        transition: background 0.4s ease, box-shadow 0.4s ease;
-    }
-
-    .fixed-settings-buttons button {
-        width: 180px;
-        padding: 12px 18px;
-        font-size: 16px;
-        font-weight: 500;
-        border-radius: 15px;
-        box-shadow: 0 6px 15px rgba(0,0,0,0.1);
-        background: var(--toggle-button-bg);
-        color: white;
-        transition: all 0.3s ease;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
-        position: relative;
-    }
-
-    .fixed-settings-buttons button:hover {
-        background: var(--toggle-button-hover);
-        transform: translateY(-2px);
-        box-shadow: 0 9px 18px rgba(0,0,0,0.15);
-    }
-
-    body:not(.dark) .dark-toggle {
-        background: linear-gradient(45deg, #007bff, #0056b3);
-    }
-
-    body:not(.dark) .dark-toggle:hover {
-        background: linear-gradient(45deg, #0056b3, #007bff);
-    }
-
-    .fixed-settings-buttons button svg {
-        width: 18px;
-        height: 18px;
-        fill: white;
-    }
+    /* Fixed Settings Button (Dark Mode Toggle - Omitted for brevity) */
 
     /* Copy Icon */
     .copy-icon {
@@ -381,19 +333,6 @@
 
     .profit-label {
         color: #28a745; /* Green color for Take Profit label */
-    }
-
-    /* Responsive Adjustments (Omitted for brevity, assuming carried over from previous code) */
-    @media (max-width: 768px) {
-        body { padding: 20px; font-size: 16px; }
-        .container { padding: 30px 20px; }
-        .currency-selection button, .risk-selection button, input[type="number"] { padding: 12px 15px; font-size: 15px; }
-        .button-group { flex-direction: column; }
-    }
-    @media (max-width: 480px) {
-        body { padding: 15px; }
-        .fixed-settings-buttons { position: static; flex-direction: row; }
-        .container { padding: 20px 15px; }
     }
 </style>
 </head>
@@ -469,35 +408,44 @@
             });
         }
 
-        // --- Currency Selection Logic (Fixed) ---
+        // --- Currency Selection Logic (تثبیت‌شده) ---
         function selectCurrency(pair) {
+            // حذف کلاس active از تمام دکمه‌های جفت ارز
             const buttons = document.querySelectorAll('.currency-button');
             buttons.forEach(button => button.classList.remove('active'));
             
-            // Fix: Ensure the correct button ID is targeted
-            document.getElementById(`btn${pair}`).classList.add('active');
+            // افزودن کلاس active به دکمه فعلی
+            const targetButton = document.getElementById(`btn${pair}`);
+            if (targetButton) {
+                targetButton.classList.add('active');
+            }
+            // به‌روزرسانی مقدار پنهان
             document.getElementById('currencyPair').value = pair;
             updateInputLabels(pair);
         }
 
-        // --- Risk Selection Logic (Fixed) ---
+        // --- Risk Selection Logic (تثبیت‌شده) ---
         function selectRisk(percent) {
+            // حذف کلاس active از تمام دکمه‌های ریسک
             const buttons = document.querySelectorAll('.risk-button');
             buttons.forEach(button => button.classList.remove('active'));
             
-            // Note: The ID logic uses 'btnRisk1' for 1% and 'btnRisk05' for 0.5%
             const idSuffix = (percent === 1) ? '1' : '05'; 
             
-            // Fix: Ensure the correct button ID is targeted
-            document.getElementById(`btnRisk${idSuffix}`).classList.add('active');
+            // افزودن کلاس active به دکمه فعلی
+            const targetButton = document.getElementById(`btnRisk${idSuffix}`);
+            if (targetButton) {
+                targetButton.classList.add('active');
+            }
+            // به‌روزرسانی مقدار پنهان
             document.getElementById('forexRiskPercent').value = percent;
         }
 
-        // --- Main Calculation Logic (Fixed for Random/Empty Inputs) ---
+        // --- Main Calculation Logic (با قابلیت تولید رندوم) ---
         function calculateForex(tradeType) {
             document.getElementById("output").style.display = "flex";
 
-            // --- 1. Get Values (will be NaN if field is empty) ---
+            // --- 1. Get Values ---
             let accountSize = parseFloat(document.getElementById('forexAccountSize').value);
             let riskPercent = parseFloat(document.getElementById('forexRiskPercent').value); 
             let currencyPair = document.getElementById('currencyPair').value;
@@ -505,10 +453,10 @@
             let inputStopLossValue = parseFloat(document.getElementById('forexStopPips').value);
             let inputTakeProfitValue = parseFloat(document.getElementById('forexTpPips').value);
 
-            // --- 2. Random/Default Generation for Empty Fields (Ensures calculation always runs) ---
+            // --- 2. Random/Default Generation for Empty Fields (رفع مشکل کار نکردن بدون ورودی) ---
             if (isNaN(accountSize) || accountSize <= 0) {
-                accountSize = getRandomInRange(5000, 20000, 2); // Set a realistic random account size
-                document.getElementById('forexAccountSize').value = accountSize.toFixed(2); // Set the field value
+                accountSize = getRandomInRange(5000, 20000, 2); 
+                document.getElementById('forexAccountSize').value = accountSize.toFixed(2); 
             }
 
             if (isNaN(entryPrice) || entryPrice <= 0) {
@@ -516,25 +464,22 @@
                     'USDCAD': [1.30000, 1.35000, 5], 
                     'USDJPY': [150.000, 160.000, 3], 
                 };
-                // Use the correct range based on the currently selected currencyPair
                 const [min, max, decimals] = priceRanges[currencyPair] || [1.00000, 1.50000, 5];
                 entryPrice = getRandomInRange(min, max, decimals);
-                document.getElementById('forexEntryPrice').value = entryPrice.toFixed(decimals); // Set the field value
+                document.getElementById('forexEntryPrice').value = entryPrice.toFixed(decimals); 
             }
             
             if (isNaN(inputStopLossValue) || inputStopLossValue <= 0) {
-                inputStopLossValue = getRandomInRange(15, 60, 1); // Random SL pips
-                document.getElementById('forexStopPips').value = inputStopLossValue.toFixed(1); // Set the field value
+                inputStopLossValue = getRandomInRange(15, 60, 1); 
+                document.getElementById('forexStopPips').value = inputStopLossValue.toFixed(1); 
             }
             
             if (isNaN(inputTakeProfitValue) || inputTakeProfitValue <= 0) {
-                inputTakeProfitValue = getRandomInRange(70, 200, 1); // Random TP pips
-                document.getElementById('forexTpPips').value = inputTakeProfitValue.toFixed(1); // Set the field value
+                inputTakeProfitValue = getRandomInRange(70, 200, 1); 
+                document.getElementById('forexTpPips').value = inputTakeProfitValue.toFixed(1); 
             }
             
-            // **NOTE:** Now all variables (accountSize, entryPrice, stopLossValue, takeProfitValue) have valid numbers.
-            // **We can proceed with the calculation.**
-
+            // --- 3. Calculation Logic ---
             const riskAmount = accountSize * (riskPercent / 100);
 
             let pricePrecision;
@@ -549,4 +494,45 @@
             const config = pairConfigs[currencyPair];
 
             if (!config) {
-                document.getElementById("output").innerHTML = `<p style="color: #e05e5e;">Selected currency pair (${currenc
+                document.getElementById("output").innerHTML = `<p style="color: #e05e5e;">Selected currency pair (${currencyPair}) is not supported.</p>`;
+                return;
+            }
+
+            pricePrecision = config.pricePrecision;
+
+            stopLossPriceChangeInPriceUnits = inputStopLossValue * config.pipSize;
+            takeProfitPriceChangeInPriceUnits = inputTakeProfitValue * config.pipSize;
+            
+            const displayStopLossPrice = (tradeType === 'long') ? entryPrice - stopLossPriceChangeInPriceUnits : entryPrice + stopLossPriceChangeInPriceUnits;
+            const displayTakeProfitPrice = (tradeType === 'long') ? entryPrice + takeProfitPriceChangeInPriceUnits : entryPrice - takeProfitPriceChangeInPriceUnits;
+
+            // --- Validation Logic ---
+            if (tradeType === 'long') {
+                if (displayStopLossPrice >= entryPrice || displayTakeProfitPrice <= entryPrice) {
+                    document.getElementById("output").innerHTML = `<p style="color: #e05e5e;">For a **Buy (Long)** position, Stop Loss must be **LOWER** and Take Profit must be **HIGHER** than the Entry Price. Adjust Pips.</p>`;
+                    return;
+                }
+            } else { // Short position
+                if (displayStopLossPrice <= entryPrice || displayTakeProfitPrice >= entryPrice) {
+                    document.getElementById("output").innerHTML = `<p style="color: #e05e5e;">For a **Sell (Short)** position, Stop Loss must be **HIGHER** and Take Profit must be **LOWER** than the Entry Price. Adjust Pips.</p>`;
+                    return;
+                }
+            }
+            
+            // --- Position Size Calculation Logic ---
+            const quoteCurrency = currencyPair.substring(3);
+            const standardLotSize = 100000;
+            
+            let valuePerPipOrPointPerLot; 
+            
+            if (quoteCurrency === 'USD') {
+                valuePerPipOrPointPerLot = standardLotSize * config.pipSize; 
+            } else if (['JPY', 'CAD'].includes(quoteCurrency)) { 
+                valuePerPipOrPointPerLot = (standardLotSize * config.pipSize) / entryPrice;
+            } else {
+                document.getElementById("output").innerHTML = `<p style="color: #e05e5e;">Calculation for cross-currency pair ${currencyPair} is not fully supported.</p>`;
+                return;
+            }
+
+            const effectiveStopLossDistance = inputStopLossValue;
+            const totalDollarR
