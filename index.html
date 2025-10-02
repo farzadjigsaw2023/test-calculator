@@ -179,10 +179,21 @@
         transition: all 0.3s ease;
     }
 
+    /* بهبود هاور دکمه‌های جفت ارز و ریسک */
     .currency-selection button:hover,
     .risk-selection button:hover {
-        background-color: var(--hover-bg);
+        background-color: var(--hover-bg); 
+        transform: translateY(-1px); /* کمی بالا آمدن */
+        box-shadow: 0 4px 10px rgba(0,0,0,0.08); /* افزودن سایه محو */
+        border-color: #ced4da; /* مرز کمی تیره‌تر برای کنتراست */
     }
+
+    body.dark .currency-selection button:hover,
+    body.dark .risk-selection button:hover {
+        box-shadow: 0 4px 10px rgba(255,255,255,0.05); /* سایه در دارک مود */
+        border-color: #4a5a6a; 
+    }
+    /* ------------------------------------------ */
 
     .currency-selection button.active,
     .risk-selection button.active {
@@ -223,7 +234,8 @@
     button.buy:hover {
         background: var(--button-buy-hover);
         transform: translateY(-3px);
-        box-shadow: 0 12px 25px rgba(0,0,0,0.2);
+        /* بهبود یافته: سایه بزرگتر و تیره تر */
+        box-shadow: 0 15px 30px rgba(40, 167, 69, 0.3); 
     }
 
     button.sell {
@@ -233,7 +245,8 @@
     button.sell:hover {
         background: var(--button-sell-hover);
         transform: translateY(-3px);
-        box-shadow: 0 12px 25px rgba(0,0,0,0.2);
+        /* بهبود یافته: سایه بزرگتر و تیره تر */
+        box-shadow: 0 15px 30px rgba(220, 53, 69, 0.3); 
     }
 
     /* Result Section */
@@ -281,6 +294,7 @@
         text-align: left;
         font-family: 'Poppins', sans-serif;
         border: 1px solid var(--border-color);
+        position: relative; /* Added for tooltip positioning */
     }
 
     th {
@@ -358,193 +372,84 @@
         height: 18px;
         vertical-align: middle;
         fill: var(--copy-icon-color);
-        transition: fill 0.3s ease;
+        transition: all 0.3s ease;
+        position: relative; /* Important for positioning the message */
+        z-index: 10;
+        display: inline-block;
     }
 
+    /* بهبود هاور دکمه کپی */
     .copy-icon:hover {
         fill: #007bff;
+        transform: scale(1.2);
+        filter: drop-shadow(0 0 5px rgba(0, 123, 255, 0.5));
     }
     
-    /* New styles for Profit and Loss colors */
+    /* New styles for copy message */
+    .copy-message {
+        position: absolute;
+        top: 50%; /* Center vertically */
+        right: 120%; /* Position to the left of the icon (in LTR context) */
+        transform: translateY(-50%);
+        background: #007bff;
+        color: white;
+        padding: 4px 8px;
+        border-radius: 6px;
+        font-size: 12px;
+        white-space: nowrap;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        z-index: 5; /* Below the icon */
+    }
+
+    .copy-message.show {
+        opacity: 1;
+    }
+    
     .profit-row td {
-        color: #28a745; /* Green color for profit */
+        color: #28a745;
     }
     
     .loss-row td {
-        color: #dc3545; /* Red color for loss */
+        color: #dc3545;
     }
 
-    /* New styles for input labels */
     .loss-label {
-        color: #dc3545; /* Red color for Stop Loss label */
+        color: #dc3545;
     }
 
     .profit-label {
-        color: #28a745; /* Green color for Take Profit label */
+        color: #28a745;
     }
 
-    /* Responsive Adjustments */
+    /* Responsive Adjustments (unchanged) */
     @media (max-width: 768px) {
-        body {
-            padding: 20px;
-            font-size: 16px;
-        }
-
-        .fixed-settings-buttons {
-            top: 15px;
-            right: 15px;
-            gap: 10px;
-        }
-
-        .fixed-settings-buttons button {
-            width: 160px;
-            padding: 10px 15px;
-            font-size: 15px;
-            border-radius: 14px;
-        }
-
-        .fixed-settings-buttons button svg {
-            width: 16px;
-            height: 16px;
-        }
-
-        .container {
-            padding: 30px 20px;
-            border-radius: 18px;
-            margin-top: 30px;
-        }
-
-        label {
-            font-size: 15px;
-            margin: 18px 0 6px;
-        }
-
-        input[type="number"],
-        input[type="text"] {
-            padding: 12px 15px;
-            font-size: 15px;
-            border-radius: 10px;
-        }
-        
-        .custom-select-options li {
-            padding: 10px 15px;
-            font-size: 15px;
-        }
-
-        .button-group {
-            flex-direction: column;
-            gap: 12px;
-            margin-top: 25px;
-        }
-
-        button {
-            padding: 12px 20px;
-            font-size: 16px;
-            border-radius: 10px;
-        }
-
-        .result {
-            padding: 25px 20px;
-            font-size: 17px;
-            border-radius: 16px;
-            margin-top: 30px;
-            min-height: 220px;
-        }
-
-        table {
-            font-size: 15px;
-            border-spacing: 0 8px;
-        }
-
-        th, td {
-            padding: 12px 18px;
-            border-radius: 8px;
-        }
+        body { padding: 20px; font-size: 16px; }
+        .fixed-settings-buttons { top: 15px; right: 15px; gap: 10px; }
+        .fixed-settings-buttons button { width: 160px; padding: 10px 15px; font-size: 15px; border-radius: 14px; }
+        .container { padding: 30px 20px; border-radius: 18px; margin-top: 30px; }
+        label { font-size: 15px; margin: 18px 0 6px; }
+        input[type="number"], input[type="text"] { padding: 12px 15px; font-size: 15px; border-radius: 10px; }
+        .button-group { flex-direction: column; gap: 12px; margin-top: 25px; }
+        button { padding: 12px 20px; font-size: 16px; border-radius: 10px; }
+        .result { padding: 25px 20px; font-size: 17px; border-radius: 16px; margin-top: 30px; min-height: 220px; }
+        table { font-size: 15px; border-spacing: 0 8px; }
+        th, td { padding: 12px 18px; border-radius: 8px; }
     }
 
     @media (max-width: 480px) {
-        body {
-            padding: 15px;
-            font-size: 14px;
-        }
-
-        .fixed-settings-buttons {
-            position: static;
-            margin: 0 auto 20px;
-            flex-direction: row;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 8px;
-            width: 100%;
-            padding: 0;
-            box-shadow: none;
-            background: none;
-        }
-
-        .fixed-settings-buttons button {
-            width: auto;
-            flex: 1;
-            min-width: 120px;
-            padding: 10px 12px;
-            font-size: 14px;
-            border-radius: 12px;
-        }
-
-        .fixed-settings-buttons button svg {
-            display: none;
-        }
-
-        .container {
-            padding: 20px 15px;
-            border-radius: 15px;
-            margin-top: 20px;
-        }
-
-        label {
-            font-size: 14px;
-            margin: 15px 0 5px;
-        }
-
-        input[type="number"],
-        input[type="text"],
-        .custom-select {
-            padding: 10px 12px;
-            font-size: 14px;
-            border-radius: 8px;
-        }
-
-        .custom-select-options li {
-            padding: 8px 12px;
-            font-size: 14px;
-        }
-
-        .button-group {
-            gap: 10px;
-        }
-
-        button {
-            padding: 10px 15px;
-            font-size: 15px;
-            border-radius: 8px;
-        }
-
-        .result {
-            padding: 15px 20px;
-            font-size: 16px;
-            border-radius: 14px;
-            margin-top: 20px;
-            min-height: 180px;
-        }
-
-        table {
-            font-size: 14px;
-            border-spacing: 0 6px;
-        }
-
-        th, td {
-            padding: 10px 15px;
-            border-radius: 8px;
-        }
+        body { padding: 15px; font-size: 14px; }
+        .fixed-settings-buttons { position: static; margin: 0 auto 20px; flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 8px; width: 100%; padding: 0; box-shadow: none; background: none; }
+        .fixed-settings-buttons button { width: auto; flex: 1; min-width: 120px; padding: 10px 12px; font-size: 14px; border-radius: 12px; }
+        .fixed-settings-buttons button svg { display: none; }
+        .container { padding: 20px 15px; border-radius: 15px; margin-top: 20px; }
+        label { font-size: 14px; margin: 15px 0 5px; }
+        input[type="number"], input[type="text"], .custom-select { padding: 10px 12px; font-size: 14px; border-radius: 8px; }
+        .button-group { gap: 10px; }
+        button { padding: 10px 15px; font-size: 15px; border-radius: 8px; }
+        .result { padding: 15px 20px; font-size: 16px; border-radius: 14px; margin-top: 20px; min-height: 180px; }
+        table { font-size: 14px; border-spacing: 0 6px; }
+        th, td { padding: 10px 15px; border-radius: 8px; }
     }
 </style>
 </head>
@@ -556,8 +461,7 @@
                 <div class="currency-selection">
                     <button id="btnUSDCAD" class="currency-button active" onclick="selectCurrency('USDCAD')">USDCAD</button>
                     <button id="btnUSDJPY" class="currency-button" onclick="selectCurrency('USDJPY')">USDJPY</button>
-                    <button id="btnUSDCHF" class="currency-button" onclick="selectCurrency('USDCHF')">USDCHF</button>
-                </div>
+                    </div>
             </div>
             
             <input type="hidden" id="currencyPair" value="USDCAD">
@@ -604,18 +508,48 @@
             return Math.round((Math.random() * (max - min) + min) * factor) / factor;
         }
 
+        // تابع کپی به‌روز شده
         function copyValue(event, value) {
             event.stopPropagation();
             navigator.clipboard.writeText(value).then(() => {
                 const iconElement = event.currentTarget;
                 const originalInnerHTML = iconElement.innerHTML;
                 const originalFill = iconElement.style.fill;
+                
+                // Save original transform and filter style to restore them correctly
+                const originalTransform = iconElement.style.transform;
+                const originalFilter = iconElement.style.filter;
+                
+                // 1. نمایش پیام "کپی شد"
+                const message = document.createElement('div');
+                message.className = 'copy-message show';
+                message.textContent = 'Copied!'; // می توانید به 'کپی شد' تغییر دهید
+                iconElement.parentNode.appendChild(message);
+                
+                // 2. تغییر به آیکون تیک سبز
                 iconElement.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="20px" height="20px"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>'; /* Checkmark SVG */
                 iconElement.style.fill = '#28a745'; /* Green checkmark */
+                iconElement.style.transform = 'scale(1.2)'; 
+                iconElement.style.filter = 'drop-shadow(0 0 5px rgba(40, 167, 69, 0.5))'; 
+
+                // 3. بازگشت به حالت اولیه بعد از 1.5 ثانیه
                 setTimeout(() => {
+                    // حذف پیام
+                    message.classList.remove('show');
+                    message.style.opacity = '0';
+                    setTimeout(() => {
+                         if (iconElement.parentNode.contains(message)) {
+                            iconElement.parentNode.removeChild(message);
+                         }
+                    }, 300); // 300ms transition time
+                    
+                    // بازگرداندن آیکون و استایل
                     iconElement.innerHTML = originalInnerHTML;
                     iconElement.style.fill = originalFill;
+                    iconElement.style.transform = originalTransform; 
+                    iconElement.style.filter = originalFilter;
                 }, 1500);
+                
             }).catch(err => {
                 console.error('Failed to copy: ', err);
             });
@@ -657,25 +591,21 @@
                 accountSize = getRandomInRange(1000, 10000, 2);
                 document.getElementById('forexAccountSize').value = accountSize;
             }
-            // Risk percent is now always selected (defaults to 1%), so no need to generate random risk
 
             if (isNaN(entryPrice) || entryPrice <= 0) {
                 const priceRanges = {
-                    'USDCAD': [1.30, 1.40, 5], // New range for USDCAD
-                    'USDJPY': [140, 160, 3], // Existing JPY
-                    'USDCHF': [0.85, 0.95, 5], // New range for USDCHF
+                    'USDCAD': [1.30, 1.40, 5], 
+                    'USDJPY': [140, 160, 3], 
                 };
                 const [min, max, decimals] = priceRanges[currencyPair] || [1, 2, 5];
                 entryPrice = getRandomInRange(min, max, decimals);
                 document.getElementById('forexEntryPrice').value = entryPrice;
             }
             if (isNaN(inputStopLossValue) || inputStopLossValue <= 0) {
-                // Adjusting ranges for more realistic pips, 10-50 for all pairs
                 inputStopLossValue = getRandomInRange(10, 50, 1);
                 document.getElementById('forexStopPips').value = inputStopLossValue;
             }
             if (isNaN(inputTakeProfitValue) || inputTakeProfitValue <= 0) {
-                // Adjusting ranges for more realistic pips, 50-150 for all pairs
                 inputTakeProfitValue = getRandomInRange(50, 150, 1);
                 document.getElementById('forexTpPips').value = inputTakeProfitValue;
             }
@@ -687,9 +617,8 @@
             let takeProfitPriceChangeInPriceUnits;
 
             const pairConfigs = {
-                'USDCAD': { 'pipSize': 0.0001, 'pricePrecision': 5 }, // Config for USDCAD (4-digit pair)
+                'USDCAD': { 'pipSize': 0.0001, 'pricePrecision': 5 }, 
                 'USDJPY': { 'pipSize': 0.01, 'pricePrecision': 3 },
-                'USDCHF': { 'pipSize': 0.0001, 'pricePrecision': 5 }, // Config for USDCHF (4-digit pair)
             };
 
             const config = pairConfigs[currencyPair];
@@ -707,7 +636,7 @@
             const displayStopLossPrice = (tradeType === 'long') ? entryPrice - stopLossPriceChangeInPriceUnits : entryPrice + stopLossPriceChangeInPriceUnits;
             const displayTakeProfitPrice = (tradeType === 'long') ? entryPrice + takeProfitPriceChangeInPriceUnits : entryPrice - takeProfitPriceChangeInPriceUnits;
 
-            // --- Validation Logic (Same as before) ---
+            // --- Validation Logic ---
             if (tradeType === 'long') {
                 if (displayStopLossPrice >= entryPrice) {
                     document.getElementById("output").innerHTML = `<p style="color: #e05e5e;">For a **Buy (Long)** position, the Stop Loss price must be **lower** than the Entry Price.</p>`;
@@ -734,18 +663,11 @@
             
             let valuePerPipOrPointPerLot; 
             if (quoteCurrency === 'USD') {
-                // Pairs quoted in USD (e.g., EURUSD)
-                // This case is unlikely for the new pairs (USDCAD, USDJPY, USDCHF) but kept for completeness
                 valuePerPipOrPointPerLot = standardLotSize * config.pipSize; 
             } else if (quoteCurrency === 'JPY') {
-                // Pairs quoted in JPY (e.g., USDJPY)
                 valuePerPipOrPointPerLot = (standardLotSize * config.pipSize) / entryPrice;
-            } else if (quoteCurrency === 'CAD' || quoteCurrency === 'CHF') {
-                 // For pairs where USD is the base (e.g., USDCHF, USDCAD), 
-                 // the pip value is in the quote currency. We convert to USD by dividing by Entry Price.
-                 // Pip value in Quote Currency = StandardLotSize * PipSize
+            } else if (quoteCurrency === 'CAD') {
                  const pipValueInQuote = standardLotSize * config.pipSize;
-                 // Pip value in USD = Pip Value in Quote Currency / Entry Price
                  valuePerPipOrPointPerLot = pipValueInQuote / entryPrice;
             } else {
                 document.getElementById("output").innerHTML = `<p style="color: #e05e5e;">Calculation for cross-currency pair ${currencyPair} is not fully supported.</p>`;
@@ -780,6 +702,7 @@
         }
 
         function createCopyableTableRow(label, displayValue, valueToCopy) {
+            // آیکون کپی در حال حاضر داخل یک <span> با کلاس copy-icon است.
             return `<tr><td>${label}</td><td>${displayValue} <span class="copy-icon" onclick="copyValue(event, '${valueToCopy}')"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="18px" height="18px"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg></span></td></tr>`;
         }
 
