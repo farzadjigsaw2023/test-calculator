@@ -461,7 +461,9 @@
                 <div class="currency-selection">
                     <button id="btnUSDCAD" class="currency-button active" onclick="selectCurrency('USDCAD')">CAD</button>
                     <button id="btnUSDJPY" class="currency-button" onclick="selectCurrency('USDJPY')">JPY</button>
-                    </div>
+                    <button id="btnAUDUSD" class="currency-button" onclick="selectCurrency('AUDUSD')">AUD</button>
+                    <button id="btnNZDUSD" class="currency-button" onclick="selectCurrency('NZDUSD')">NZD</button>
+                </div>
             </div>
             
             <input type="hidden" id="currencyPair" value="USDCAD">
@@ -596,6 +598,9 @@
                 const priceRanges = {
                     'USDCAD': [1.30, 1.40, 5], 
                     'USDJPY': [140, 160, 3], 
+                    'AUDUSD': [0.65, 0.75, 5],
+                    // تغییر: محدوده برای NZDUSD اضافه شد
+                    'NZDUSD': [0.60, 0.70, 5], 
                 };
                 const [min, max, decimals] = priceRanges[currencyPair] || [1, 2, 5];
                 entryPrice = getRandomInRange(min, max, decimals);
@@ -619,6 +624,9 @@
             const pairConfigs = {
                 'USDCAD': { 'pipSize': 0.0001, 'pricePrecision': 5 }, 
                 'USDJPY': { 'pipSize': 0.01, 'pricePrecision': 3 },
+                'AUDUSD': { 'pipSize': 0.0001, 'pricePrecision': 5 },
+                // تغییر: پیکربندی NZDUSD اضافه شد
+                'NZDUSD': { 'pipSize': 0.0001, 'pricePrecision': 5 },
             };
 
             const config = pairConfigs[currencyPair];
@@ -662,7 +670,10 @@
             const standardLotSize = 100000;
             
             let valuePerPipOrPointPerLot; 
+            
+            // محاسبه Value Per Pip (این بخش برای NZDUSD نیازی به تغییر نداشت)
             if (quoteCurrency === 'USD') {
+                // برای جفت‌هایی که USD ارز مظنه است (مانند NZDUSD و AUDUSD)، ارزش پیپ ثابت است.
                 valuePerPipOrPointPerLot = standardLotSize * config.pipSize; 
             } else if (quoteCurrency === 'JPY') {
                 valuePerPipOrPointPerLot = (standardLotSize * config.pipSize) / entryPrice;
