@@ -158,8 +158,23 @@
     }
 
     /* Styles for Selection Buttons (Currency & Risk) */
-    .currency-selection,
-    .risk-selection { /* Now applying to both */
+    .currency-selection {
+        /* تغییر: حذف flex اصلی برای Currency Selection */
+        margin-bottom: 20px;
+    }
+    
+    .currency-row {
+        /* اضافه شده: ایجاد ردیف‌های داخلی با فلکس */
+        display: flex;
+        gap: 15px;
+        margin-bottom: 15px; /* فاصله بین ردیف‌های دکمه‌ها */
+    }
+    
+    .currency-row:last-child {
+        margin-bottom: 0;
+    }
+    
+    .risk-selection {
         display: flex;
         gap: 15px;
         margin-bottom: 20px;
@@ -422,7 +437,7 @@
         color: #28a745;
     }
 
-    /* Responsive Adjustments (unchanged) */
+    /* Responsive Adjustments (UNCHANGED, but ensures 2x2 on small screens too) */
     @media (max-width: 768px) {
         body { padding: 20px; font-size: 16px; }
         .fixed-settings-buttons { top: 15px; right: 15px; gap: 10px; }
@@ -430,6 +445,7 @@
         .container { padding: 30px 20px; border-radius: 18px; margin-top: 30px; }
         label { font-size: 15px; margin: 18px 0 6px; }
         input[type="number"], input[type="text"] { padding: 12px 15px; font-size: 15px; border-radius: 10px; }
+        .currency-row { gap: 10px; margin-bottom: 10px; } /* تنظیمات ریسپانسیو ردیف‌های جفت ارز */
         .button-group { flex-direction: column; gap: 12px; margin-top: 25px; }
         button { padding: 12px 20px; font-size: 16px; border-radius: 10px; }
         .result { padding: 25px 20px; font-size: 17px; border-radius: 16px; margin-top: 30px; min-height: 220px; }
@@ -445,6 +461,7 @@
         .container { padding: 20px 15px; border-radius: 15px; margin-top: 20px; }
         label { font-size: 14px; margin: 15px 0 5px; }
         input[type="number"], input[type="text"], .custom-select { padding: 10px 12px; font-size: 14px; border-radius: 8px; }
+        .currency-row { gap: 8px; margin-bottom: 8px; } /* تنظیمات ریسپانسیو ردیف‌های جفت ارز */
         .button-group { gap: 10px; }
         button { padding: 10px 15px; font-size: 15px; border-radius: 8px; }
         .result { padding: 15px 20px; font-size: 16px; border-radius: 14px; margin-top: 20px; min-height: 180px; }
@@ -459,10 +476,14 @@
             <div class="input-group">
                 <label>Currency Pair</label>
                 <div class="currency-selection">
-                    <button id="btnUSDCAD" class="currency-button active" onclick="selectCurrency('USDCAD')">CAD</button>
-                    <button id="btnUSDJPY" class="currency-button" onclick="selectCurrency('USDJPY')">JPY</button>
-                    <button id="btnAUDUSD" class="currency-button" onclick="selectCurrency('AUDUSD')">AUD</button>
-                    <button id="btnNZDUSD" class="currency-button" onclick="selectCurrency('NZDUSD')">NZD</button>
+                    <div class="currency-row">
+                        <button id="btnUSDCAD" class="currency-button active" onclick="selectCurrency('USDCAD')">CAD</button>
+                        <button id="btnUSDJPY" class="currency-button" onclick="selectCurrency('USDJPY')">JPY</button>
+                    </div>
+                    <div class="currency-row">
+                        <button id="btnAUDUSD" class="currency-button" onclick="selectCurrency('AUDUSD')">AUD</button>
+                        <button id="btnNZDUSD" class="currency-button" onclick="selectCurrency('NZDUSD')">NZD</button>
+                    </div>
                 </div>
             </div>
             
@@ -748,4 +769,3 @@
     </script>
 </body>
 </html>
-
